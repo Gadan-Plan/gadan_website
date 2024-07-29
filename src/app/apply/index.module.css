@@ -14,7 +14,7 @@
 .applicationForm {
     width: 1240px;
     position: relative;
-    z-index: 10;
+    z-index: 20;
   }
 
   .applicationFormTitle {
@@ -40,7 +40,6 @@
     border: 1px dotted ;  
     border-radius: 20px;
     display: block; /* 使图片在新行显示 */  
-    margin-top: 10px; /* 在canvas和生成的图片之间添加一些间距 */  
     color: #FFE3BC;
     position: relative;
   } 
@@ -55,4 +54,21 @@
     padding: 10px;
     text-align: center;
     line-height: 3rem;
+  }
+
+  .headerUploader  {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  .topBottomContainer{
+    /* absolute  z-10 bottom-0 left-0  */
+    position:absolute;
+    z-index: 10;
+    bottom: 0;
+    left:0;
+width: 100%;
   } 
+  .topBottomContainer{
+    width: 100%;
+    height: auto;
+  }

@@ -7,22 +7,23 @@ import {
   Select,
   DatePicker,
   Upload,
-  Flex,
+  Button,
   message,
   ColorPicker,
   Col,
   Row,
   Radio,
+  ConfigProvider,
+  Cascader,
 } from "antd";
 import type { GetProp, UploadProps } from "antd";
 import type { selectType, applicationForm } from "./type";
 import NFTCanvas from "./logoCreator";
-// import QuillEditor from '../../components/QuillEditor'; // 假设有对应的 React 组件
-// import LogoCreator from '../../components/LogoCreator'; // 假设有对应的 React 组件
-// import ColorPicker from '../../components/ColorPicker'; // 假设有对应的 React 组件
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
-// import addressOption from '../../utils/address/cascader-address-options.js';
-// import { mockBase64 } from './data.js';
+import addressOption from "@/utils/address/cascader-address-options.js";
+import Header from "@/app/component/header";
 import dayjs from "dayjs";
 import { mockBase64 } from "./mock";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -52,7 +53,8 @@ const ApplyPage = () => {
     neuterTime: dayjs(new Date()),
     status: "1",
     name: "咪咪",
-    headerImageUrl: mockBase64,
+    // headerImageUrl: undefined,
+    quillContent: "这里可以写一写猫猫的日常",
   });
   const [fileList, setFileList] = useState([]);
   const [imgLoading, setImgLoading] = useState(false);
@@ -101,21 +103,8 @@ const ApplyPage = () => {
 
   return (
     <>
+      <Header></Header>
       <div className="flex py-40 relative  justify-center">
-        <Image
-          src="/bg_top_left@2x.png"
-          className="absolute  z-10 top-0 left-0"
-          width={100}
-          height={24}
-          alt=""
-        />
-        <Image
-          src="/bg_top_right@2x.png"
-          className="absolute  z-10  top-0 right-0  "
-          alt=""
-          width={100}
-          height={24}
-        />
         <div className={styles.applicationForm}>
           <div className="flex">
             <Image width={50} alt="" height={25} src="/icon_title01@2x.png" />
@@ -128,39 +117,47 @@ const ApplyPage = () => {
 
           <Row>
             <Col span={10}>
-              <Row>
+              <Row className="my-2.5">
                 <Col span={5}>
                   <span className="text-red-500">*</span>{" "}
                   <span>猫猫形象: </span>
                 </Col>
                 <Col span={9}>
-                  <Upload
-                    name="avatar"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                    beforeUpload={beforeUpload}
-                    onChange={changeHeaderUrl}
+                  <ConfigProvider
+                    theme={{
+                      token: {
+                        colorPrimary: "#FFA940",
+                        borderRadius: 21,
+                      },
+                    }}
                   >
-                    {fromData.headerImageUrl ? (
-                      <Image
-                        src={fromData.headerImageUrl}
-                        alt="avatar"
-                        width={300}
-                        height={300}
-                        style={{ width: "100%" }}
-                      />
-                    ) : (
-                      <button
-                        style={{ border: 0, background: "none" }}
-                        type="button"
-                      >
-                        {loading ? <LoadingOutlined /> : <PlusOutlined />}
-                        <div style={{ marginTop: 8 }}>猫猫形象</div>
-                      </button>
-                    )}
-                  </Upload>
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className={styles.avatarUploader}
+                      showUploadList={false}
+                      action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                      beforeUpload={beforeUpload}
+                      onChange={changeHeaderUrl}
+                    >
+                      {fromData.headerImageUrl ? (
+                        <Image
+                          src={fromData.headerImageUrl}
+                          alt="avatar"
+                          width={300}
+                          height={300}
+                          style={{ width: "100%", }}
+                        />
+                      ) : (
+                        <button
+                          style={{ border: 0, background: "none" }}
+                          type="button"
+                        >
+                          {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                        </button>
+                      )}
+                    </Upload>
+                  </ConfigProvider>
                 </Col>
                 <Col span={3}>
                   <span className="text-red-500">*</span> <span>色调: </span>
@@ -172,7 +169,15 @@ const ApplyPage = () => {
                   ></ColorPicker>
                 </Col>
               </Row>
-              <Row>
+              <ConfigProvider
+                    theme={{
+                      token: {
+                        colorPrimary: "#FFA940",
+                        borderRadius: 21,
+                      },
+                    }}
+                  >
+              <Row className="my-2.5">
                 <Col span={5}>
                   <span className="text-red-500">*</span>
                   <span>猫猫名字: </span>
@@ -184,7 +189,7 @@ const ApplyPage = () => {
                   ></Input>
                 </Col>
               </Row>
-              <Row>
+              <Row className="my-2.5">
                 <Col span={5}>
                   <span className="text-red-500">*</span>
                   <span>噶蛋日: </span>
@@ -200,6 +205,7 @@ const ApplyPage = () => {
                   />
                 </Col>
               </Row>
+              </ConfigProvider>
             </Col>
             <Col span={12}>
               <NFTCanvas
@@ -210,8 +216,15 @@ const ApplyPage = () => {
               ></NFTCanvas>
             </Col>
           </Row>
-
-          <Row>
+          <ConfigProvider
+                    theme={{
+                      token: {
+                        colorPrimary: "#FFA940",
+                        borderRadius: 21,
+                      },
+                    }}
+                  >
+          <Row className="my-2.5">
             <Col span={2}>
               <span className="text-red-500">*</span>
               <span>性别: </span>
@@ -234,37 +247,44 @@ const ApplyPage = () => {
               />
             </Col>
           </Row>
-          <Row>
+          <Row className="my-2.5">
             <Col span={2}>
               <span className="text-red-500">*</span>
               <span>噶蛋地址: </span>
             </Col>
             <Col span={6}>
-              {/* <a-cascader
-         style="width: 100%"
-         v-model:value="fromData.address"
-         :options="addressOption"
-         placeholder="请选择"
-       /> */}
+              <Cascader
+                options={addressOption}
+                value={fromData.address}
+                placeholder="请选择"
+              />
             </Col>
           </Row>
-          <Row>
+          <Row className="my-2.5">
             <Col span={2}>
               <span className="text-red-500">*</span>
               <span>猫猫状态: </span>
             </Col>
             <Col span={6}>
-              {/* <a-radio-group
-         v-model:value="fromData.status"
-         :options="[
-           { value: '1', label: '已送养' },
-           { value: '2', label: '寻领养' },
-           { value: '3', label: '已放归' },
-         ]"
-       /> */}
+              <Radio.Group
+                options={[
+                  { value: "1", label: "已送养" },
+                  { value: "2", label: "寻领养" },
+                  { value: "3", label: "已放归" },
+                ]}
+                value={fromData.status}
+                onChange={(e: any) => {
+                  // 使用函数式的setState来更新状态
+                  setFromData((prevFromData) => ({
+                    ...prevFromData, // 保留之前的所有字段值
+                    status: e.target.status, // 只更新status字段的值
+                  }));
+                  console.log("fromData.status", fromData.status);
+                }}
+              />
             </Col>
           </Row>
-          <Row>
+          <Row className="my-2.5">
             <Col span={2}>
               <span className="text-red-500">*</span>
               <span>猫猫性格: </span>
@@ -280,7 +300,7 @@ const ApplyPage = () => {
               />
             </Col>
           </Row>
-          <Row>
+          <Row className="my-2.5">
             <Col span={2}>
               <span className="text-red-500">*</span>
               <span>噶蛋纪念照: </span>
@@ -315,42 +335,76 @@ const ApplyPage = () => {
               </Upload>
             </Col>
           </Row>
-          <Row>
+          <Row className="my-2.5 h-80">
             <Col span={2}>
-              <span className="text-red-500">*</span>
+              <span className="text-red-500 ">*</span>
               <span>猫猫故事: </span>
             </Col>
-            <Col span={10}>
-              {/* <quill-editor
-         style="height: 300px"
-         v-model="fromData.quillContent"
-         placeholder="这里可以记录猫猫的日常"
-       /> */}
+            <Col span={16}>
+              <ReactQuill
+                theme="snow"
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ color: [] }, { background: [] }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    [{ script: "sub" }, { script: "super" }],
+                    ["clean"],
+                    ["link", "image", "video"],
+                  ],
+                }}
+                value={fromData.quillContent}
+                onChange={() => {}}
+                className="h-60"
+              />
             </Col>
           </Row>
-          <Row>
-            <Col span={12} className="flex-row-center">
-              {/* <a-button type="primary" class="submit">申请</a-button>
-       <a-button type="primary" class="submit-nft">mint</a-button> */}
+          <Row className="py-10">
+            <Col span={16} className="flex justify-center">
+              <Button type="primary" className="mr-8">
+                申请
+              </Button>
+              <Button type="primary" className="">
+                mint
+              </Button>
             </Col>
           </Row>
+          </ConfigProvider>
         </div>
-
-        <Image
-          src="/bg_top_bottom@2x.png"
-          className="absolute  z-10 bottom-0 left-0  "
-          alt=""
-          width={100}
-          height={24}
-        />
         <Image
           src="/bg_bottom@2x.png"
-          className=" absolute  z-10 bottom-0 right-0  "
+          className="absolute  z-10 bottom-0 right-0  "
           alt=""
-          width={100}
-          height={24}
+          width={3840}
+          height={2802}
+          layout="responsive"
         />
-        <div className="absolute  z-10 top-96 right-0 w-96">
+        <Image
+          src="/bg_top_bottom@2x.png"
+          className="absolute  z-10 bottom-0 left-0 "
+          alt=""
+          width={3840}
+          height={394}
+          layout="responsive"
+        />
+        <Image
+          src="/bg_top_left@2x.png"
+          className="absolute z-10 top-0 left-0 w-1/4"
+          width={742}
+          height={454}
+          alt=""
+          // layout="responsive"
+        />
+        <Image
+          src="/bg_top_right@2x.png"
+          className="absolute  z-10  top-0 right-0  w-1/4"
+          alt=""
+          width={730}
+          height={536}
+          // layout="responsive"
+        />
+        <div className="absolute  z-10 top-96 right-0 w-96 ">
           <div className="relative">
             <div className={styles.bigMiaoBubble}>
               请在这里填写小喵咪的申请资料哦！miao

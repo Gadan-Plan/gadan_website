@@ -1,0 +1,37 @@
+
+.header {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 0px 0px 30px 30px;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  width: 1240px;
+  height: 79px;
+  border: 1px solid rgba(188, 159, 101, 1);
+  left: calc(50% - 620px);
+  color: #2c2019;
+}
+.headerTitle {
+  font-size: 1.6rem;
+  font-family: "MuyaoFont";
+}
+.headerLogo {
+  width: 45px;
+  height: 45px;
+  margin-right: 10px;
+}
+
+.headerCat {
+  width: 34px;
+  height: 32px;
+}
+/* a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #2c2019;
+  margin: 5px 0;
+} */
+::v-deep .ant-switch-disabled{
+background-color: #FFE3C2;
+}

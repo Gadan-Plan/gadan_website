@@ -1,6 +1,6 @@
 import Image from "next/image";
 import clsx from 'clsx';
-import Header from './header';  
+import Header from './component/header';  
 export default function Home() {
   const status = 'pending'
   return (
