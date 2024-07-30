@@ -25,13 +25,17 @@
   width: 34px;
   height: 32px;
 }
-/* a:link,
-a:visited,
-a:hover,
-a:active {
-  color: #2c2019;
-  margin: 5px 0;
-} */
-::v-deep .ant-switch-disabled{
-background-color: #FFE3C2;
+.footer {
+  background: #181818;
+  color: #fff;
+  padding: 60px 0;
+  display: flex;
+  justify-content: center;
+}
+.footerMain {
+  width: 1240px;
+}
+.footerTitle {
+  font-family: "MuyaoFont";
+  font-size: 1.6rem;
 }

@@ -23,7 +23,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
 import addressOption from "@/utils/address/cascader-address-options.js";
-import Header from "@/app/component/header";
 import dayjs from "dayjs";
 import { mockBase64 } from "./mock";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -103,7 +102,6 @@ const ApplyPage = () => {
 
   return (
     <>
-      <Header></Header>
       <div className="flex py-40 relative  justify-center">
         <div className={styles.applicationForm}>
           <div className="flex">
@@ -146,7 +144,7 @@ const ApplyPage = () => {
                           alt="avatar"
                           width={300}
                           height={300}
-                          style={{ width: "100%", }}
+                          style={{ width: "100%" }}
                         />
                       ) : (
                         <button
@@ -170,41 +168,41 @@ const ApplyPage = () => {
                 </Col>
               </Row>
               <ConfigProvider
-                    theme={{
-                      token: {
-                        colorPrimary: "#FFA940",
-                        borderRadius: 21,
-                      },
-                    }}
-                  >
-              <Row className="my-2.5">
-                <Col span={5}>
-                  <span className="text-red-500">*</span>
-                  <span>猫猫名字: </span>
-                </Col>
-                <Col span={14}>
-                  <Input
-                    placeholder="请输入猫猫的名字🐱"
-                    value={fromData.name}
-                  ></Input>
-                </Col>
-              </Row>
-              <Row className="my-2.5">
-                <Col span={5}>
-                  <span className="text-red-500">*</span>
-                  <span>噶蛋日: </span>
-                </Col>
-                <Col span={14}>
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    placeholder="请选择"
-                    format={{
-                      format: "YYYY-MM-DD",
-                    }}
-                    value={fromData.neuterTime}
-                  />
-                </Col>
-              </Row>
+                theme={{
+                  token: {
+                    colorPrimary: "#FFA940",
+                    borderRadius: 21,
+                  },
+                }}
+              >
+                <Row className="my-2.5">
+                  <Col span={5}>
+                    <span className="text-red-500">*</span>
+                    <span>猫猫名字: </span>
+                  </Col>
+                  <Col span={14}>
+                    <Input
+                      placeholder="请输入猫猫的名字🐱"
+                      value={fromData.name}
+                    ></Input>
+                  </Col>
+                </Row>
+                <Row className="my-2.5">
+                  <Col span={5}>
+                    <span className="text-red-500">*</span>
+                    <span>噶蛋日: </span>
+                  </Col>
+                  <Col span={14}>
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      placeholder="请选择"
+                      format={{
+                        format: "YYYY-MM-DD",
+                      }}
+                      value={fromData.neuterTime}
+                    />
+                  </Col>
+                </Row>
               </ConfigProvider>
             </Col>
             <Col span={12}>
@@ -217,159 +215,160 @@ const ApplyPage = () => {
             </Col>
           </Row>
           <ConfigProvider
-                    theme={{
-                      token: {
-                        colorPrimary: "#FFA940",
-                        borderRadius: 21,
-                      },
-                    }}
-                  >
-          <Row className="my-2.5">
-            <Col span={2}>
-              <span className="text-red-500">*</span>
-              <span>性别: </span>
-            </Col>
-            <Col span={6}>
-              <Radio.Group
-                options={[
-                  { value: "female", label: "母" },
-                  { value: "male", label: "公" },
-                ]}
-                value={fromData.gender}
-                onChange={(e) => {
-                  // 使用函数式的setState来更新状态
-                  setFromData((prevFromData) => ({
-                    ...prevFromData, // 保留之前的所有字段值
-                    gender: e.target.value, // 只更新gender字段的值
-                  }));
-                  console.log("fromData.gender", fromData.gender);
-                }}
-              />
-            </Col>
-          </Row>
-          <Row className="my-2.5">
-            <Col span={2}>
-              <span className="text-red-500">*</span>
-              <span>噶蛋地址: </span>
-            </Col>
-            <Col span={6}>
-              <Cascader
-                options={addressOption}
-                value={fromData.address}
-                placeholder="请选择"
-              />
-            </Col>
-          </Row>
-          <Row className="my-2.5">
-            <Col span={2}>
-              <span className="text-red-500">*</span>
-              <span>猫猫状态: </span>
-            </Col>
-            <Col span={6}>
-              <Radio.Group
-                options={[
-                  { value: "1", label: "已送养" },
-                  { value: "2", label: "寻领养" },
-                  { value: "3", label: "已放归" },
-                ]}
-                value={fromData.status}
-                onChange={(e: any) => {
-                  // 使用函数式的setState来更新状态
-                  setFromData((prevFromData) => ({
-                    ...prevFromData, // 保留之前的所有字段值
-                    status: e.target.status, // 只更新status字段的值
-                  }));
-                  console.log("fromData.status", fromData.status);
-                }}
-              />
-            </Col>
-          </Row>
-          <Row className="my-2.5">
-            <Col span={2}>
-              <span className="text-red-500">*</span>
-              <span>猫猫性格: </span>
-            </Col>
-            <Col span={6}>
-              <Select
-                style={{ width: "100%" }}
-                value={fromData.character}
-                mode="multiple"
-                placeholder="请选择"
-                //   onChange={handleChange}
-                options={characterOptions}
-              />
-            </Col>
-          </Row>
-          <Row className="my-2.5">
-            <Col span={2}>
-              <span className="text-red-500">*</span>
-              <span>噶蛋纪念照: </span>
-            </Col>
-            <Col span={6}>
-              <Upload
-                name="avatar"
-                listType="picture-card"
-                className="neuter-uploader"
-                showUploadList={false}
-                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                beforeUpload={beforeUpload}
-                onChange={changeNeuterImgUrl}
-              >
-                {fromData.neuterImgUrl ? (
-                  <Image
-                    src={fromData.neuterImgUrl}
-                    alt="avatar"
-                    width={300}
-                    height={300}
-                    style={{ width: "100%" }}
-                  />
-                ) : (
-                  <button
-                    style={{ border: 0, background: "none" }}
-                    type="button"
-                  >
-                    {loading ? <LoadingOutlined /> : <PlusOutlined />}
-                    <div style={{ marginTop: 8 }}>手术照片</div>
-                  </button>
-                )}
-              </Upload>
-            </Col>
-          </Row>
-          <Row className="my-2.5 h-80">
-            <Col span={2}>
-              <span className="text-red-500 ">*</span>
-              <span>猫猫故事: </span>
-            </Col>
-            <Col span={16}>
-              <ReactQuill
-                theme="snow"
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ color: [] }, { background: [] }],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    [{ script: "sub" }, { script: "super" }],
-                    ["clean"],
-                    ["link", "image", "video"],
-                  ],
-                }}
-                value={fromData.quillContent}
-                onChange={() => {}}
-                className="h-60"
-              />
-            </Col>
-          </Row>
-          <Row className="py-10">
-            <Col span={16} className="flex justify-center">
-              <Button type="primary" className="mr-8">
-                申请
-              </Button>
-              <Button type="primary" className="">
-                mint
-              </Button>
-            </Col>
-          </Row>
+            theme={{
+              token: {
+                colorPrimary: "#FFA940",
+                borderRadius: 21,
+              },
+            }}
+          >
+            <Row className="my-2.5">
+              <Col span={2}>
+                <span className="text-red-500">*</span>
+                <span>性别: </span>
+              </Col>
+              <Col span={6}>
+                <Radio.Group
+                  options={[
+                    { value: "female", label: "母" },
+                    { value: "male", label: "公" },
+                  ]}
+                  value={fromData.gender}
+                  onChange={(e) => {
+                    // 使用函数式的setState来更新状态
+                    setFromData((prevFromData) => ({
+                      ...prevFromData, // 保留之前的所有字段值
+                      gender: e.target.value, // 只更新gender字段的值
+                    }));
+                    console.log("fromData.gender", fromData.gender);
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row className="my-2.5">
+              <Col span={2}>
+                <span className="text-red-500">*</span>
+                <span>噶蛋地址: </span>
+              </Col>
+              <Col span={6}>
+                <Cascader
+                  options={addressOption}
+                  value={fromData.address}
+                  placeholder="请选择"
+                />
+              </Col>
+            </Row>
+            <Row className="my-2.5">
+              <Col span={2}>
+                <span className="text-red-500">*</span>
+                <span>猫猫状态: </span>
+              </Col>
+              <Col span={6}>
+                <Radio.Group
+                  options={[
+                    { value: "1", label: "已送养" },
+                    { value: "2", label: "寻领养" },
+                    { value: "3", label: "已放归" },
+                  ]}
+                  value={fromData.status}
+                  onChange={(e: any) => {
+                    // 使用函数式的setState来更新状态
+                    setFromData((prevFromData) => ({
+                      ...prevFromData, // 保留之前的所有字段值
+                      status: e.target.status, // 只更新status字段的值
+                    }));
+                    console.log("fromData.status", fromData.status);
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row className="my-2.5">
+              <Col span={2}>
+                <span className="text-red-500">*</span>
+                <span>猫猫性格: </span>
+              </Col>
+              <Col span={6}>
+                <Select
+                  style={{ width: "100%" }}
+                  value={fromData.character}
+                  mode="multiple"
+                  placeholder="请选择"
+                  //   onChange={handleChange}
+                  options={characterOptions}
+                />
+              </Col>
+            </Row>
+            <Row className="my-2.5">
+              <Col span={2}>
+                <span className="text-red-500">*</span>
+                <span>噶蛋纪念照: </span>
+              </Col>
+              <Col span={6}>
+                <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  className="neuter-uploader"
+                  showUploadList={false}
+                  action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                  beforeUpload={beforeUpload}
+                  onChange={changeNeuterImgUrl}
+                >
+                  {fromData.neuterImgUrl ? (
+                    <Image
+                      src={fromData.neuterImgUrl}
+                      alt="avatar"
+                      width={300}
+                      height={300}
+                      style={{ width: "100%" }}
+                    />
+                  ) : (
+                    <button
+                      style={{ border: 0, background: "none" }}
+                      type="button"
+                    >
+                      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                      <div style={{ marginTop: 8 }}>手术照片</div>
+                    </button>
+                  )}
+                </Upload>
+              </Col>
+            </Row>
+            <Row className="my-2.5 h-72">
+              <Col span={2}>
+                <span className="text-red-500 ">*</span>
+                <span>猫猫故事: </span>
+              </Col>
+              <Col span={16}>
+                <ReactQuill
+                  theme="snow"
+                  modules={{
+                    toolbar: [
+                      [{ header: [1, 2, false] }],
+                      ["bold", "italic", "underline", "strike"],
+                      [{ color: [] }, { background: [] }],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      [{ script: "sub" }, { script: "super" }],
+                      ["clean"],
+                      ["link", "image", "video"],
+                    ],
+                  }}
+                  // value={fromData.quillContent}
+                  // onChange={() => {}}
+                  className="h-60"
+                />
+              </Col>
+            </Row>
+            <Row >
+            <Col span={2}></Col>
+              <Col span={12} className="flex ">
+                <Button type="primary"  className={styles.applyButton}>
+                  申请
+                </Button>
+                <Button type="primary" className={styles.applyButton}>
+                  mint
+                </Button>
+              </Col>
+            </Row>
           </ConfigProvider>
         </div>
         <Image
