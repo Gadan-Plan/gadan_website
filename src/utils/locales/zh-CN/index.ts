@@ -1,0 +1,44 @@
+export default {
+  link:{
+    home:'首页',
+    apply:'申请中心',
+    statistics:'统计中心',
+    profile:'个人中心',
+  },
+  basic:{
+    character1:'胆小',
+    character2:'粘人',
+    character3:'田园',
+    character4:'混血',
+  },
+  common:{
+
+  },
+  apply:{
+    figure:'猫猫形象',
+    tone:'色调',
+    name:'猫猫名字',
+    sterilizationDay:'噶蛋日',
+    sex:'性别',
+    birthMonth:'预计出生月',
+    country:'所属国',
+    female:'母',
+    male:'公',
+    sterilizationAddress:'噶蛋地点',
+    condition:'状态',
+    conditionValue1:'已送养',
+    conditionValue2:'寻领养',
+    conditionValue3:'已放归',
+    conditionValue4:'回喵星',
+    personality:'猫猫性格',
+    sterilizationPhoto:'噶蛋纪念照',
+    surgicalPhotos:'手术照片',
+    story:'猫猫故事',
+    buttonName:'申请',
+    guide:'请在这里填写小喵咪的申请资料哦!',
+    nftGuide:'这里就是最终的NFT效果啦!',
+  },
+  header:{
+    slogen:'噶蛋计划',
+  },
+};

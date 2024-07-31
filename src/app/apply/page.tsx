@@ -24,7 +24,9 @@ import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
 import addressOption from "@/utils/address/cascader-address-options.js";
 import dayjs from "dayjs";
-import { mockBase64 } from "./mock";
+import { useTranslation } from "react-i18next";
+import { formatToDate } from "@/utils/common/dateUtil";
+import countryOptions from "@/utils/address/country.json";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
@@ -32,6 +34,7 @@ const getBase64 = (img: FileType, callback: (url: string) => void) => {
   reader.addEventListener("load", () => callback(reader.result as string));
   reader.readAsDataURL(img);
 };
+
 const beforeUpload = (file: FileType) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
   if (!isJpgOrPng) {
@@ -45,30 +48,32 @@ const beforeUpload = (file: FileType) => {
 };
 
 const ApplyPage = () => {
+  const { t } = useTranslation();
   const [chooseColor, setChooseColor] = useState("#FFA940");
   const [loading, setLoading] = useState(false);
   const [fromData, setFromData] = useState<applicationForm>({
     gender: "male",
-    neuterTime: dayjs(new Date()),
+    neuterTime: formatToDate(),
     status: "1",
     name: "咪咪",
     // headerImageUrl: undefined,
     quillContent: "这里可以写一写猫猫的日常",
+    country: "CN",
   });
+
+  const characterOptions = [
+    { value: "1", label: t("basic.character1") },
+    { value: "2", label: t("basic.character2") },
+    { value: "3", label: t("basic.character3") },
+    { value: "4", label: t("basic.character4") },
+  ];
   const [fileList, setFileList] = useState([]);
   const [imgLoading, setImgLoading] = useState(false);
-  const characterOptions = [
-    { value: "1", label: "性格1" },
-    { value: "2", label: "性格2" },
-    { value: "3", label: "性格3" },
-    { value: "4", label: "性格4" },
-  ];
 
   useEffect(() => {
     //   console.log(dayjs(new Date()).format('YYYY-MM-DD'));
   }, []);
   //猫猫标识
-
   const changeHeaderUrl: UploadProps["onChange"] = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -100,12 +105,22 @@ const ApplyPage = () => {
     }
   };
 
+  //提交
+  const handleSubmit = () => {
+    console.log("handleSubmit", fromData);
+  };
+
   return (
     <>
       <div className="flex py-40 relative  justify-center">
         <div className={styles.applicationForm}>
           <div className="flex">
-            <Image width={50} alt="" height={25} src="/icon_title01@2x.png" />
+            <Image
+              width={50}
+              alt=""
+              height={25}
+              src="/img/icon_title01@2x.png"
+            />
             <div className={styles.applicationFormTitle}>申请中心</div>
           </div>
 
@@ -115,12 +130,12 @@ const ApplyPage = () => {
 
           <Row>
             <Col span={10}>
-              <Row className="my-2.5">
-                <Col span={5}>
+              <Row className="my-3.5">
+                <Col span={7}>
                   <span className="text-red-500">*</span>{" "}
-                  <span>猫猫形象: </span>
+                  <span>{t("apply.figure")}: </span>
                 </Col>
-                <Col span={9}>
+                <Col span={7}>
                   <ConfigProvider
                     theme={{
                       token: {
@@ -157,8 +172,9 @@ const ApplyPage = () => {
                     </Upload>
                   </ConfigProvider>
                 </Col>
-                <Col span={3}>
-                  <span className="text-red-500">*</span> <span>色调: </span>
+                <Col span={4}>
+                  <span className="text-red-500">*</span>{" "}
+                  <span>{t("apply.tone")}: </span>
                 </Col>
                 <Col span={4}>
                   <ColorPicker
@@ -175,31 +191,35 @@ const ApplyPage = () => {
                   },
                 }}
               >
-                <Row className="my-2.5">
-                  <Col span={5}>
+                <Row className="my-3.5">
+                  <Col span={7}>
                     <span className="text-red-500">*</span>
-                    <span>猫猫名字: </span>
+                    <span>{t("apply.name")}: </span>
                   </Col>
                   <Col span={14}>
-                    <Input
-                      placeholder="请输入猫猫的名字🐱"
-                      value={fromData.name}
-                    ></Input>
+                    <Input placeholder="🐱" value={fromData.name}></Input>
                   </Col>
                 </Row>
-                <Row className="my-2.5">
-                  <Col span={5}>
+                <Row className="my-3.5">
+                  <Col span={7}>
                     <span className="text-red-500">*</span>
-                    <span>噶蛋日: </span>
+                    <span>{t("apply.sterilizationDay")}: </span>
                   </Col>
                   <Col span={14}>
                     <DatePicker
                       style={{ width: "100%" }}
-                      placeholder="请选择"
+                      placeholder="please choose"
                       format={{
                         format: "YYYY-MM-DD",
                       }}
-                      value={fromData.neuterTime}
+                      value={dayjs(fromData.neuterTime)}
+                      onChange={(date) => {
+                        console.log("date", date);
+                        setFromData((prevFromData) => ({
+                          ...prevFromData,
+                          neuterTime: dayjs(date).format("YYYY-MM-DD"),
+                        }));
+                      }}
                     />
                   </Col>
                 </Row>
@@ -222,86 +242,140 @@ const ApplyPage = () => {
               },
             }}
           >
-            <Row className="my-2.5">
-              <Col span={2}>
+            <Row className="my-3.5">
+              <Col span={3}>
                 <span className="text-red-500">*</span>
-                <span>性别: </span>
+                <span>{t("apply.sex")}: </span>
               </Col>
-              <Col span={6}>
+              <Col span={12}>
                 <Radio.Group
                   options={[
-                    { value: "female", label: "母" },
-                    { value: "male", label: "公" },
+                    { value: "female", label: t("apply.female") },
+                    { value: "male", label: t("apply.male") },
                   ]}
                   value={fromData.gender}
                   onChange={(e) => {
-                    // 使用函数式的setState来更新状态
                     setFromData((prevFromData) => ({
-                      ...prevFromData, // 保留之前的所有字段值
-                      gender: e.target.value, // 只更新gender字段的值
+                      ...prevFromData,
+                      gender: e.target.value,
                     }));
-                    console.log("fromData.gender", fromData.gender);
                   }}
                 />
               </Col>
             </Row>
-            <Row className="my-2.5">
-              <Col span={2}>
+            <Row className="my-3.5">
+              <Col span={3}>
                 <span className="text-red-500">*</span>
-                <span>噶蛋地址: </span>
+                <span>{t("apply.birthMonth")}: </span>
               </Col>
-              <Col span={6}>
-                <Cascader
-                  options={addressOption}
-                  value={fromData.address}
-                  placeholder="请选择"
+              <Col span={12}>
+                <DatePicker
+                  style={{ width: "100%" }}
+                  placeholder="please choose"
+                  format={{
+                    format: "YYYY-MM",
+                  }}
+                  value={dayjs(fromData.birthMonth)}
+                  onChange={(date) => {
+                    setFromData((prevFromData) => ({
+                      ...prevFromData,
+                      birthMonth: dayjs(date).format("YYYY-MM"),
+                    }));
+                  }}
                 />
               </Col>
             </Row>
-            <Row className="my-2.5">
-              <Col span={2}>
+            <Row className="my-3.5">
+              <Col span={3}>
                 <span className="text-red-500">*</span>
-                <span>猫猫状态: </span>
+                <span>{t("apply.country")}: </span>
               </Col>
-              <Col span={6}>
+              <Col span={12}>
+                <Select
+                  style={{ width: "100%" }}
+                  value={fromData.country}
+                  placeholder="please select"
+                  options={countryOptions}
+                  showSearch
+                  onChange={(e: any) => {
+                    setFromData((prevFromData) => ({
+                      ...prevFromData,
+                      country: e,
+                    }));
+                  }}
+                />
+              </Col>
+            </Row>
+            {fromData.country == "CN" && (
+              <Row className="my-3.5">
+                <Col span={3}>
+                  <span className="text-red-500">*</span>
+                  <span>{t("apply.sterilizationAddress")}: </span>
+                </Col>
+                <Col span={12}>
+                  <Cascader
+                    style={{ width: "100%" }}
+                    options={addressOption}
+                    value={fromData.address}
+                    placeholder="please choose"
+                    onChange={(e) => {
+                      setFromData((prevFromData) => ({
+                        ...prevFromData,
+                        address: e,
+                      }));
+                    }}
+                  />
+                </Col>
+              </Row>
+            )}
+            <Row className="my-3.5">
+              <Col span={3}>
+                <span className="text-red-500">*</span>
+                <span>{t("apply.condition")}: </span>
+              </Col>
+              <Col span={12}>
                 <Radio.Group
                   options={[
-                    { value: "1", label: "已送养" },
-                    { value: "2", label: "寻领养" },
-                    { value: "3", label: "已放归" },
+                    { value: "1", label: t("apply.conditionValue1") },
+                    { value: "2", label: t("apply.conditionValue2") },
+                    { value: "3", label: t("apply.conditionValue3") },
+                    { value: "4", label: t("apply.conditionValue4") },
                   ]}
                   value={fromData.status}
                   onChange={(e: any) => {
-                    // 使用函数式的setState来更新状态
                     setFromData((prevFromData) => ({
-                      ...prevFromData, // 保留之前的所有字段值
-                      status: e.target.status, // 只更新status字段的值
+                      ...prevFromData,
+                      status: e.target.value,
                     }));
-                    console.log("fromData.status", fromData.status);
                   }}
                 />
               </Col>
             </Row>
-            <Row className="my-2.5">
-              <Col span={2}>
+            <Row className="my-3.5">
+              <Col span={3}>
                 <span className="text-red-500">*</span>
-                <span>猫猫性格: </span>
+                <span>{t("apply.personality")}: </span>
               </Col>
-              <Col span={6}>
+              <Col span={12}>
                 <Select
                   style={{ width: "100%" }}
                   value={fromData.character}
-                  mode="multiple"
-                  placeholder="请选择"
-                  //   onChange={handleChange}
+                  mode="tags"
+                  placeholder="please select"
                   options={characterOptions}
+                  onChange={(e: any) => {
+                    setFromData((prevFromData) => ({
+                      ...prevFromData,
+                      character: e,
+                    }));
+                  }}
                 />
               </Col>
             </Row>
-            <Row className="my-2.5">
-              <Col span={2}>
+            <Row className="my-3.5">
+              <Col span={3}>
                 <span className="text-red-500">*</span>
-                <span>噶蛋纪念照: </span>
+                <span>{t("apply.sterilizationPhoto")}: </span>
               </Col>
               <Col span={6}>
                 <Upload
@@ -327,18 +401,20 @@ const ApplyPage = () => {
                       type="button"
                     >
                       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-                      <div style={{ marginTop: 8 }}>手术照片</div>
+                      <div style={{ marginTop: 8 }}>
+                        {t("apply.surgicalPhotos")}
+                      </div>
                     </button>
                   )}
                 </Upload>
               </Col>
             </Row>
-            <Row className="my-2.5 h-72">
-              <Col span={2}>
+            <Row className="my-3.5 h-72">
+              <Col span={3}>
                 <span className="text-red-500 ">*</span>
-                <span>猫猫故事: </span>
+                <span>{t("apply.story")}: </span>
               </Col>
-              <Col span={16}>
+              <Col span={12}>
                 <ReactQuill
                   theme="snow"
                   modules={{
@@ -358,11 +434,15 @@ const ApplyPage = () => {
                 />
               </Col>
             </Row>
-            <Row >
-            <Col span={2}></Col>
+            <Row>
+              <Col span={3}></Col>
               <Col span={12} className="flex ">
-                <Button type="primary"  className={styles.applyButton}>
-                  申请
+                <Button
+                  type="primary"
+                  className={styles.applyButton}
+                  onClick={handleSubmit}
+                >
+                  {t("apply.buttonName")}
                 </Button>
                 <Button type="primary" className={styles.applyButton}>
                   mint
@@ -372,7 +452,7 @@ const ApplyPage = () => {
           </ConfigProvider>
         </div>
         <Image
-          src="/bg_bottom@2x.png"
+          src="/img/bg_bottom@2x.png"
           className="absolute  z-10 bottom-0 right-0  "
           alt=""
           width={3840}
@@ -380,7 +460,7 @@ const ApplyPage = () => {
           layout="responsive"
         />
         <Image
-          src="/bg_top_bottom@2x.png"
+          src="/img/bg_top_bottom@2x.png"
           className="absolute  z-10 bottom-0 left-0 "
           alt=""
           width={3840}
@@ -388,7 +468,7 @@ const ApplyPage = () => {
           layout="responsive"
         />
         <Image
-          src="/bg_top_left@2x.png"
+          src="/img/bg_top_left@2x.png"
           className="absolute z-10 top-0 left-0 w-1/4"
           width={742}
           height={454}
@@ -396,19 +476,17 @@ const ApplyPage = () => {
           // layout="responsive"
         />
         <Image
-          src="/bg_top_right@2x.png"
+          src="/img/bg_top_right@2x.png"
           className="absolute  z-10  top-0 right-0  w-1/4"
           alt=""
           width={730}
           height={536}
           // layout="responsive"
         />
-        <div className="absolute  z-10 top-96 right-0 w-96 ">
+        <div className="absolute  z-10 top-56 right-10 w-96 ">
           <div className="relative">
-            <div className={styles.bigMiaoBubble}>
-              请在这里填写小喵咪的申请资料哦！miao
-            </div>
-            <img src="/cat@2x.png" className="absolute w-full" alt="" />
+            <div className={styles.bigMiaoBubble}>{t("apply.guide")}miao</div>
+            <img src="/img/cat@2x.png" className="absolute w-full" alt="" />
           </div>
         </div>
       </div>

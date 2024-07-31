@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import styles from "./index.module.css"; // 假设你有一个CSS模块来处理样式
+import styles from "./index.module.css"; 
+import { useTranslation } from "react-i18next";
 interface Props {
   base64Url: string;
   time: string;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const NFTCanvas: React.FC<Props> = ({ base64Url, time, name, color }) => {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [outputImage, setOutputImage] = useState<string | null>(null);
 
@@ -24,7 +26,7 @@ const NFTCanvas: React.FC<Props> = ({ base64Url, time, name, color }) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除之前的绘制内容
     // 创建一个圆形路径并裁剪画布
     const logo = new window.Image();
-    logo.src = "/icon_logo@2x.png";
+    logo.src = "/img/icon_logo@2x.png";
     logo.onload = () => {
       // 绘制base64图片
       if (base64Url) {
@@ -50,15 +52,15 @@ const NFTCanvas: React.FC<Props> = ({ base64Url, time, name, color }) => {
   };
 
   return (
-    <div>
+    <div >
       <canvas
         ref={canvasRef}
-        width={200}
-        height={200}
+        width={220}
+        height={220}
         style={{ display: "none" }}
       />
       <div className={styles.showBox}>
-        <div className={styles.showBoxWord}>这里就是最终的NFT效果啦!</div>
+        <div className={styles.showBoxWord}>{t("apply.nftGuide")}</div>
         {outputImage && (
           <img
             src={outputImage}
