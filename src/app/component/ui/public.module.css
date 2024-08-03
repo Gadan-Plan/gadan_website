@@ -39,3 +39,16 @@
   font-family: "MuyaoFont";
   font-size: 1.6rem;
 }
+
+
+  /* 文本+图片组件 */
+  .describeImg{
+    border-radius: 21px;
+    border:1px solid #FFA940;
+    padding: 1rem;
+  }
+  .describeTextarea{
+    color: #181818;
+    border:none;
+    box-shadow: none !important;
+  }

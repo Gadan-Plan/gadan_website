@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import styles from "./index.module.css"; 
 import { useTranslation } from "react-i18next";
 interface Props {
-  base64Url: string;
+  base64Url: string|undefined;
   time: string;
   name: string;
   color: string;

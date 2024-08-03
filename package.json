@@ -12,6 +12,8 @@
     "antd": "^5.19.3",
     "clsx": "^2.1.1",
     "css-doodle": "^0.39.2",
+    "echarts": "^5.5.1",
+    "echarts-for-react": "^3.0.2",
     "i18next": "^23.12.2",
     "next": "14.2.5",
     "next-i18next": "^15.3.0",

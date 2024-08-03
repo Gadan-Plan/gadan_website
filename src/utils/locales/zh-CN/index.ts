@@ -6,7 +6,7 @@ export default {
     profile:'个人中心',
   },
   basic:{
-    character1:'胆小',
+    character1:'可爱',
     character2:'粘人',
     character3:'田园',
     character4:'混血',
@@ -20,7 +20,7 @@ export default {
     name:'猫猫名字',
     sterilizationDay:'噶蛋日',
     sex:'性别',
-    birthMonth:'预计出生月',
+    birthMonth:'出生月',
     country:'所属国',
     female:'母',
     male:'公',
@@ -36,8 +36,14 @@ export default {
     story:'猫猫故事',
     buttonName:'申请',
     guide:'请在这里填写小喵咪的申请资料哦!',
+    guide1:'如果年纪还小的小猫咪,还没到噶蛋年龄的话，',
+    guide2:'出生月和噶蛋日都可以填写估算日期嗷!',
     nftGuide:'这里就是最终的NFT效果啦!',
   },
+  describe:{
+    placeholder:'这里可以写一写猫猫的日常'
+  },
+  
   header:{
     slogen:'噶蛋计划',
   },

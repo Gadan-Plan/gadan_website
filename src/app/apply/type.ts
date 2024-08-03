@@ -6,7 +6,7 @@ export interface selectType {
 
 export interface applicationForm {
     name:string;//名字
-    headerImageUrl:string;//标识
+    headerImageUrl:string|undefined;//标识
     neuterTime:string;//噶蛋日
     gender:string;//性别
     birthMonth:string;//预计出生日
@@ -14,6 +14,5 @@ export interface applicationForm {
     address:string[],//噶蛋地
     status:string,//状态
     character:string[],//性格
-    neuterImgUrl:string,//噶蛋纪念照
-    quillContent:string,//富文本
+    quillContent:string|undefined,//富文本
 }

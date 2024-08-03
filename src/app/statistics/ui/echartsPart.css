@@ -1,0 +1,23 @@
+/*  EchartsPart.css 文件内容   */
+.echarts-container {  
+    position: relative;
+  overflow: hidden; 
+  font-family: 'MuyaoFont';
+}  
+  
+.ranking-list {  
+    position: absolute;
+    top:20px;
+    right: 0px;
+  padding-left: 20px; 
+  width: 20%;
+  color: #FE9146;
+}  
+  
+.ranking-item {  
+  margin-bottom: 10px; 
+}
+.statics-top{
+  margin-top:100px;
+  height: 290px;
+}

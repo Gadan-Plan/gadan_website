@@ -22,11 +22,12 @@ import NFTCanvas from "./logoCreator";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
-import addressOption from "@/utils/address/cascader-address-options.js";
+import addressOption from '@/utils/address/provinces-cities.json';
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-import { formatToDate } from "@/utils/common/dateUtil";
+import { formatToDate, getPreAfterMonth } from "@/utils/common/dateUtil";
 import countryOptions from "@/utils/address/country.json";
+import DescribeImg from '../component/describeImg'
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
@@ -35,6 +36,20 @@ const getBase64 = (img: FileType, callback: (url: string) => void) => {
   reader.readAsDataURL(img);
 };
 
+// function preserveValueAndLabel(data) {  
+//   return data.map(province => {  
+//     const { value, label, children } = province;  
+//     const newProvince = { value, label };  
+//     if (children) {  
+//       newProvince.children = children.map(city => {  
+//         const { value: cityValue, label: cityLabel } = city;  
+//         return { value: cityValue, label: cityLabel };  
+//       });  
+//     }  
+//     return newProvince;  
+//   });  
+// }  
+// console.log(preserveValueAndLabel(addressOption))
 const beforeUpload = (file: FileType) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
   if (!isJpgOrPng) {
@@ -54,11 +69,14 @@ const ApplyPage = () => {
   const [fromData, setFromData] = useState<applicationForm>({
     gender: "male",
     neuterTime: formatToDate(),
+    birthMonth: getPreAfterMonth(-6, "YYYY-MM"),
     status: "1",
     name: "咪咪",
-    // headerImageUrl: undefined,
-    quillContent: "这里可以写一写猫猫的日常",
+    quillContent: undefined,
     country: "CN",
+    address: ['浙江', '杭州'],
+    headerImageUrl: undefined,
+    character: ["1"],
   });
 
   const characterOptions = [
@@ -67,8 +85,6 @@ const ApplyPage = () => {
     { value: "3", label: t("basic.character3") },
     { value: "4", label: t("basic.character4") },
   ];
-  const [fileList, setFileList] = useState([]);
-  const [imgLoading, setImgLoading] = useState(false);
 
   useEffect(() => {
     //   console.log(dayjs(new Date()).format('YYYY-MM-DD'));
@@ -90,19 +106,6 @@ const ApplyPage = () => {
       setLoading(false);
       fromData.headerImageUrl = url;
     });
-  };
-  const changeNeuterImgUrl: UploadProps["onChange"] = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as FileType, (url) => {
-        setLoading(false);
-        fromData.neuterImgUrl = url;
-      });
-    }
   };
 
   //提交
@@ -197,7 +200,16 @@ const ApplyPage = () => {
                     <span>{t("apply.name")}: </span>
                   </Col>
                   <Col span={14}>
-                    <Input placeholder="🐱" value={fromData.name}></Input>
+                    <Input
+                      placeholder="🐱"
+                      value={fromData.name}
+                      onChange={(e) => {
+                        setFromData((prevFromData:applicationForm) => ({
+                          ...prevFromData,
+                          name: e.target.value,
+                        }));
+                      }}
+                    ></Input>
                   </Col>
                 </Row>
                 <Row className="my-3.5">
@@ -212,10 +224,10 @@ const ApplyPage = () => {
                       format={{
                         format: "YYYY-MM-DD",
                       }}
+                      allowClear={false}
                       value={dayjs(fromData.neuterTime)}
                       onChange={(date) => {
-                        console.log("date", date);
-                        setFromData((prevFromData) => ({
+                        setFromData((prevFromData:applicationForm) => ({
                           ...prevFromData,
                           neuterTime: dayjs(date).format("YYYY-MM-DD"),
                         }));
@@ -255,7 +267,7 @@ const ApplyPage = () => {
                   ]}
                   value={fromData.gender}
                   onChange={(e) => {
-                    setFromData((prevFromData) => ({
+                    setFromData((prevFromData:applicationForm) => ({
                       ...prevFromData,
                       gender: e.target.value,
                     }));
@@ -275,9 +287,10 @@ const ApplyPage = () => {
                   format={{
                     format: "YYYY-MM",
                   }}
+                  allowClear={false}
                   value={dayjs(fromData.birthMonth)}
                   onChange={(date) => {
-                    setFromData((prevFromData) => ({
+                    setFromData((prevFromData:applicationForm) => ({
                       ...prevFromData,
                       birthMonth: dayjs(date).format("YYYY-MM"),
                     }));
@@ -296,9 +309,10 @@ const ApplyPage = () => {
                   value={fromData.country}
                   placeholder="please select"
                   options={countryOptions}
+                  allowClear={false}
                   showSearch
                   onChange={(e: any) => {
-                    setFromData((prevFromData) => ({
+                    setFromData((prevFromData:applicationForm) => ({
                       ...prevFromData,
                       country: e,
                     }));
@@ -317,9 +331,10 @@ const ApplyPage = () => {
                     style={{ width: "100%" }}
                     options={addressOption}
                     value={fromData.address}
+                    allowClear={false}
                     placeholder="please choose"
                     onChange={(e) => {
-                      setFromData((prevFromData) => ({
+                      setFromData((prevFromData:applicationForm) => ({
                         ...prevFromData,
                         address: e,
                       }));
@@ -343,7 +358,7 @@ const ApplyPage = () => {
                   ]}
                   value={fromData.status}
                   onChange={(e: any) => {
-                    setFromData((prevFromData) => ({
+                    setFromData((prevFromData:applicationForm) => ({
                       ...prevFromData,
                       status: e.target.value,
                     }));
@@ -353,7 +368,6 @@ const ApplyPage = () => {
             </Row>
             <Row className="my-3.5">
               <Col span={3}>
-                <span className="text-red-500">*</span>
                 <span>{t("apply.personality")}: </span>
               </Col>
               <Col span={12}>
@@ -364,7 +378,7 @@ const ApplyPage = () => {
                   placeholder="please select"
                   options={characterOptions}
                   onChange={(e: any) => {
-                    setFromData((prevFromData) => ({
+                    setFromData((prevFromData:applicationForm) => ({
                       ...prevFromData,
                       character: e,
                     }));
@@ -372,71 +386,26 @@ const ApplyPage = () => {
                 />
               </Col>
             </Row>
+            </ConfigProvider>
             <Row className="my-3.5">
               <Col span={3}>
-                <span className="text-red-500">*</span>
-                <span>{t("apply.sterilizationPhoto")}: </span>
-              </Col>
-              <Col span={6}>
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="neuter-uploader"
-                  showUploadList={false}
-                  action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                  beforeUpload={beforeUpload}
-                  onChange={changeNeuterImgUrl}
-                >
-                  {fromData.neuterImgUrl ? (
-                    <Image
-                      src={fromData.neuterImgUrl}
-                      alt="avatar"
-                      width={300}
-                      height={300}
-                      style={{ width: "100%" }}
-                    />
-                  ) : (
-                    <button
-                      style={{ border: 0, background: "none" }}
-                      type="button"
-                    >
-                      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-                      <div style={{ marginTop: 8 }}>
-                        {t("apply.surgicalPhotos")}
-                      </div>
-                    </button>
-                  )}
-                </Upload>
-              </Col>
-            </Row>
-            <Row className="my-3.5 h-72">
-              <Col span={3}>
-                <span className="text-red-500 ">*</span>
                 <span>{t("apply.story")}: </span>
               </Col>
               <Col span={12}>
-                <ReactQuill
-                  theme="snow"
-                  modules={{
-                    toolbar: [
-                      [{ header: [1, 2, false] }],
-                      ["bold", "italic", "underline", "strike"],
-                      [{ color: [] }, { background: [] }],
-                      [{ list: "ordered" }, { list: "bullet" }],
-                      [{ script: "sub" }, { script: "super" }],
-                      ["clean"],
-                      ["link", "image", "video"],
-                    ],
-                  }}
-                  // value={fromData.quillContent}
-                  // onChange={() => {}}
-                  className="h-60"
-                />
+              <DescribeImg quillContent={fromData.quillContent}></DescribeImg>
               </Col>
             </Row>
             <Row>
               <Col span={3}></Col>
               <Col span={12} className="flex ">
+              <ConfigProvider
+                theme={{
+                  token: {
+                    colorPrimary: "#FFA940",
+                    borderRadius: 21,
+                  },
+                }}
+              >
                 <Button
                   type="primary"
                   className={styles.applyButton}
@@ -446,10 +415,10 @@ const ApplyPage = () => {
                 </Button>
                 <Button type="primary" className={styles.applyButton}>
                   mint
-                </Button>
+                </Button></ConfigProvider>
               </Col>
             </Row>
-          </ConfigProvider>
+         
         </div>
         <Image
           src="/img/bg_bottom@2x.png"
@@ -485,8 +454,8 @@ const ApplyPage = () => {
         />
         <div className="absolute  z-10 top-56 right-10 w-96 ">
           <div className="relative">
-            <div className={styles.bigMiaoBubble}>{t("apply.guide")}miao</div>
-            <img src="/img/cat@2x.png" className="absolute w-full" alt="" />
+          <img src="/img/cat@2x.png" className="absolute w-full" alt="" />
+            <div className={styles.bigMiaoBubble}>{t("apply.guide")}<br/>{t("apply.guide1")}<br/>{t("apply.guide2")}miao</div>
           </div>
         </div>
       </div>

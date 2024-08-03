@@ -1,4 +1,5 @@
 [
+  { "label": "中国", "value": "CN" },
   { "label": "Afghanistan", "value": "AF" },
   { "label": "land Islands", "value": "AX" },
   { "label": "Albania", "value": "AL" },
@@ -43,7 +44,6 @@
   { "label": "Central African Republic", "value": "CF" },
   { "label": "Chad", "value": "TD" },
   { "label": "Chile", "value": "CL" },
-  { "label": "China", "value": "CN" },
   { "label": "Christmas Island", "value": "CX" },
   { "label": "Cocos (Keeling) Islands", "value": "CC" },
   { "label": "Colombia", "value": "CO" },

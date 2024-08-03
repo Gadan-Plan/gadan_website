@@ -35,11 +35,25 @@ export function formatToDate(
         return formatToDate(dt,format);
     }
     //获取前/后n月的日期
- export   const getPreAfterMonth = function (AddMonthCount,format) {
-        var dt= new Date(nowData.currentYear,nowData.currentMonth,nowData.currentDay);
-        dt.setMonth(dt.getMonth()+AddMonthCount);
-        return formatToDate(dt,format) ;
-    }
+ /**
+ * 获取指定月份增减后的日期，并按照指定格式返回。
+ * 
+ * 本函数主要用于计算当前日期向前或向后推移指定月数后的新日期。
+ * 例如，如果指定月数为1，则返回当前日期的下一个月的日期。
+ * 如果指定的格式化字符串被提供，返回的日期字符串将按照该格式进行格式化。
+ * 
+ * @param AddMonthCount 要增减的月数，可以为正数（表示向后推移）或负数（表示向前推移）。
+ * @param format 日期的输出格式，用于定制返回的日期字符串的样式。
+ * @returns 返回按照指定格式格式化后的日期字符串。
+ */
+export const getPreAfterMonth = function (AddMonthCount, format) {
+    // 创建一个基于当前年月日的新Date对象
+    var dt = new Date(nowData.currentYear, nowData.currentMonth, nowData.currentDay);
+    // 根据传入的月数增减调整Date对象的月份
+    dt.setMonth(dt.getMonth() + AddMonthCount);
+    // 使用指定的格式化函数将调整后的日期对象转换为字符串并返回
+    return formatToDate(dt, format);
+};
 
 
     /***
