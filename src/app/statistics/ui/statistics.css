@@ -1,5 +1,21 @@
-.staticsPage{
-    background-image: url('/img/bg_bottom.png');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+.staticsPage {
+  background-image: url("/img/bg_bottom.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding-bottom: 50px;
+}
+
+.rank-header {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0.25rem 0.75rem;
+}
+.rank-line-left {
+  border-right: 1px solid #f3f3f3;
+  padding-right: 40px;
+}
+.rank-line-right {
+  padding-left: 40px;
 }

@@ -22,12 +22,12 @@ import NFTCanvas from "./logoCreator";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
-import addressOption from '@/utils/address/provinces-cities.json';
+import addressOption from "@/utils/address/provinces-cities.json";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { formatToDate, getPreAfterMonth } from "@/utils/common/dateUtil";
 import countryOptions from "@/utils/address/country.json";
-import DescribeImg from '../component/describeImg'
+import DescribeImg from "../component/describeImg";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const getBase64 = (img: FileType, callback: (url: string) => void) => {
@@ -36,19 +36,19 @@ const getBase64 = (img: FileType, callback: (url: string) => void) => {
   reader.readAsDataURL(img);
 };
 
-// function preserveValueAndLabel(data) {  
-//   return data.map(province => {  
-//     const { value, label, children } = province;  
-//     const newProvince = { value, label };  
-//     if (children) {  
-//       newProvince.children = children.map(city => {  
-//         const { value: cityValue, label: cityLabel } = city;  
-//         return { value: cityValue, label: cityLabel };  
-//       });  
-//     }  
-//     return newProvince;  
-//   });  
-// }  
+// function preserveValueAndLabel(data) {
+//   return data.map(province => {
+//     const { value, label, children } = province;
+//     const newProvince = { value, label };
+//     if (children) {
+//       newProvince.children = children.map(city => {
+//         const { value: cityValue, label: cityLabel } = city;
+//         return { value: cityValue, label: cityLabel };
+//       });
+//     }
+//     return newProvince;
+//   });
+// }
 // console.log(preserveValueAndLabel(addressOption))
 const beforeUpload = (file: FileType) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
@@ -67,15 +67,25 @@ const ApplyPage = () => {
   const [chooseColor, setChooseColor] = useState("#FFA940");
   const [loading, setLoading] = useState(false);
   const [fromData, setFromData] = useState<applicationForm>({
+    id: 22121,
     gender: "male",
     neuterTime: formatToDate(),
     birthMonth: getPreAfterMonth(-6, "YYYY-MM"),
     status: "1",
     name: "咪咪",
-    quillContent: undefined,
+    quillContent: {
+      contentText: "今天我捡了一只猫",
+      contentImgId: [
+        "1709876541",
+        "1709876542",
+        "1709876543",
+        "1709876544",
+        "1709876545",
+      ],
+    },
     country: "CN",
-    address: ['浙江', '杭州'],
-    headerImageUrl: undefined,
+    address: ["浙江", "杭州"],
+    petHeaderId: "1709876544",
     character: ["1"],
   });
 
@@ -204,7 +214,7 @@ const ApplyPage = () => {
                       placeholder="🐱"
                       value={fromData.name}
                       onChange={(e) => {
-                        setFromData((prevFromData:applicationForm) => ({
+                        setFromData((prevFromData: applicationForm) => ({
                           ...prevFromData,
                           name: e.target.value,
                         }));
@@ -227,7 +237,7 @@ const ApplyPage = () => {
                       allowClear={false}
                       value={dayjs(fromData.neuterTime)}
                       onChange={(date) => {
-                        setFromData((prevFromData:applicationForm) => ({
+                        setFromData((prevFromData: applicationForm) => ({
                           ...prevFromData,
                           neuterTime: dayjs(date).format("YYYY-MM-DD"),
                         }));
@@ -267,7 +277,7 @@ const ApplyPage = () => {
                   ]}
                   value={fromData.gender}
                   onChange={(e) => {
-                    setFromData((prevFromData:applicationForm) => ({
+                    setFromData((prevFromData: applicationForm) => ({
                       ...prevFromData,
                       gender: e.target.value,
                     }));
@@ -290,7 +300,7 @@ const ApplyPage = () => {
                   allowClear={false}
                   value={dayjs(fromData.birthMonth)}
                   onChange={(date) => {
-                    setFromData((prevFromData:applicationForm) => ({
+                    setFromData((prevFromData: applicationForm) => ({
                       ...prevFromData,
                       birthMonth: dayjs(date).format("YYYY-MM"),
                     }));
@@ -312,7 +322,7 @@ const ApplyPage = () => {
                   allowClear={false}
                   showSearch
                   onChange={(e: any) => {
-                    setFromData((prevFromData:applicationForm) => ({
+                    setFromData((prevFromData: applicationForm) => ({
                       ...prevFromData,
                       country: e,
                     }));
@@ -334,7 +344,7 @@ const ApplyPage = () => {
                     allowClear={false}
                     placeholder="please choose"
                     onChange={(e) => {
-                      setFromData((prevFromData:applicationForm) => ({
+                      setFromData((prevFromData: applicationForm) => ({
                         ...prevFromData,
                         address: e,
                       }));
@@ -358,7 +368,7 @@ const ApplyPage = () => {
                   ]}
                   value={fromData.status}
                   onChange={(e: any) => {
-                    setFromData((prevFromData:applicationForm) => ({
+                    setFromData((prevFromData: applicationForm) => ({
                       ...prevFromData,
                       status: e.target.value,
                     }));
@@ -378,7 +388,7 @@ const ApplyPage = () => {
                   placeholder="please select"
                   options={characterOptions}
                   onChange={(e: any) => {
-                    setFromData((prevFromData:applicationForm) => ({
+                    setFromData((prevFromData: applicationForm) => ({
                       ...prevFromData,
                       character: e,
                     }));
@@ -386,18 +396,18 @@ const ApplyPage = () => {
                 />
               </Col>
             </Row>
-            </ConfigProvider>
-            <Row className="my-3.5">
-              <Col span={3}>
-                <span>{t("apply.story")}: </span>
-              </Col>
-              <Col span={12}>
+          </ConfigProvider>
+          <Row className="my-3.5">
+            <Col span={3}>
+              <span>{t("apply.story")}: </span>
+            </Col>
+            <Col span={12}>
               <DescribeImg quillContent={fromData.quillContent}></DescribeImg>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={3}></Col>
-              <Col span={12} className="flex ">
+            </Col>
+          </Row>
+          <Row>
+            <Col span={3}></Col>
+            <Col span={12} className="flex ">
               <ConfigProvider
                 theme={{
                   token: {
@@ -415,10 +425,10 @@ const ApplyPage = () => {
                 </Button>
                 <Button type="primary" className={styles.applyButton}>
                   mint
-                </Button></ConfigProvider>
-              </Col>
-            </Row>
-         
+                </Button>
+              </ConfigProvider>
+            </Col>
+          </Row>
         </div>
         <Image
           src="/img/bg_bottom@2x.png"
@@ -454,8 +464,14 @@ const ApplyPage = () => {
         />
         <div className="absolute  z-10 top-56 right-10 w-96 ">
           <div className="relative">
-          <img src="/img/cat@2x.png" className="absolute w-full" alt="" />
-            <div className={styles.bigMiaoBubble}>{t("apply.guide")}<br/>{t("apply.guide1")}<br/>{t("apply.guide2")}miao</div>
+            <img src="/img/cat@2x.png" className="absolute w-full" alt="" />
+            <div className={styles.bigMiaoBubble}>
+              {t("apply.guide")}
+              <br />
+              {t("apply.guide1")}
+              <br />
+              {t("apply.guide2")}miao
+            </div>
           </div>
         </div>
       </div>

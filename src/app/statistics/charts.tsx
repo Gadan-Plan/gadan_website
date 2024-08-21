@@ -5,12 +5,12 @@ import chinaMapData from "@/utils/address/chinaMap.json";
 import "./ui/echartsPart.css";
 echarts.registerMap("china", chinaMapData);
 
-const EchartsPart = () => {
+export const EchartsPart = () => {
   const chinaData = [
     { name: "河北", num: 20 },
     { name: "海南", num: 10 },
     { name: "北京", num: 2 },
-    {name:'浙江',num:30}
+    { name: "浙江", num: 30 },
   ];
   const maxNum = chinaData.sort((a, b) => b.num - a.num)[0].num || 0;
   const getOption = (data) => {

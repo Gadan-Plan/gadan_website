@@ -8,7 +8,7 @@ import styles from "./ui/public.module.css";
 
 const Header: React.FC = () => {
   const [isCh, setIsCh] = useState<boolean>(true); // 默认中文
-  const { t  } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isCh) {
@@ -23,14 +23,13 @@ const Header: React.FC = () => {
       <Row style={{ height: "100%" }} className="items-center">
         <Col span={8} className="flex justify-center">
           <img className={styles.headerLogo} src="/img/icon_logo@2x.png" />
-          <div className={styles.headerTitle}>
-             {t("header.slogen")}
-          </div>
+          <div className={styles.headerTitle}>{t("header.slogen")}</div>
         </Col>
         <Col span={10} className="flex justify-around ">
           <Link href="/home"> {t("link.home")}</Link>
           <Link href="/apply">{t("link.apply")}</Link>
           <Link href="/statistics">{t("link.statistics")}</Link>
+          <Link href="/user">{t("link.user")}</Link>
           <Link href="/profile">{t("link.profile")}</Link>
         </Col>
         <Col span={2} className="flex justify-center">

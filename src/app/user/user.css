@@ -1,0 +1,30 @@
+.user-header {
+  height: 200px;
+  background-image: linear-gradient(#fbd24f, #fbb74f);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.user-header-search {
+  width: 700px;
+  margin-top: 100px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 25px;
+  align-items: center;
+  padding: 0 2px;
+}
+.user-header-input {
+  border: none;
+  box-shadow: none;
+}
+:where(.css-dev-only-do-not-override-1045eyd).ant-input-outlined:focus,
+:where(.css-dev-only-do-not-override-1045eyd).antinput-outlined:focus-within {
+  box-shadow: none;
+}
+.user-content-left {
+  background-color: #fff;
+}

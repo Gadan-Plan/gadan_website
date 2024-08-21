@@ -2,13 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Row, Col } from "antd";
 import Link from "next/link";
-// import i18n from '../i18n';
-
+import { useTranslation } from "react-i18next";
 import styles from "./ui/public.module.css";
 
 const Header: React.FC = () => {
   const [isCh, setIsCh] = useState<boolean>(true); // 默认中文
-
+  const { t } = useTranslation();
   useEffect(() => {
     // if (isCh) {
     //   i18n.changeLanguage('zh-CN');
@@ -22,10 +21,22 @@ const Header: React.FC = () => {
       <div className={styles.footerMain}>
         <h1 className={styles.footerTitle}>Pawsitive Neuter</h1>
         <div className="flex flex-col">
-          <Link href="/home" className="my-1">首页</Link>
-          <Link href="/apply" className="my-1">申请中心</Link>
-          <Link href="/statistics" className="my-1">统计中心</Link>
-          <Link href="/profile" className="my-1">个人中心</Link>
+          <Link href="/home" className="my-1">
+            {" "}
+            {t("link.home")}
+          </Link>
+          <Link href="/apply" className="my-1">
+            {t("link.apply")}
+          </Link>
+          <Link href="/statistics" className="my-1">
+            {t("link.statistics")}
+          </Link>
+          <Link href="/user" className="my-1">
+            {t("link.user")}
+          </Link>
+          <Link href="/profile" className="my-1">
+            {t("link.profile")}
+          </Link>
         </div>
       </div>
     </div>
