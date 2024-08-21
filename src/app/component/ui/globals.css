@@ -18,8 +18,7 @@
 
 @font-face {
   font-family: "MuyaoFont";
-  src: local("MuyaoFont"),
-    url("./Muyao-Softbrush.ttf") format("truetype");
+  src: local("MuyaoFont"), url("./Muyao-Softbrush.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -42,4 +41,8 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+a:link,
+a:hover {
+  color: #ffa940;
 }

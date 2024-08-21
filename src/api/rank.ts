@@ -120,9 +120,61 @@ export namespace RankApi {
     data: Data;
     msg: string;
   }
+
+  export interface awardsParams {
+    /**
+     * 激励起始时间
+     */
+    awardBeginDate?: string;
+    /**
+     * 激励结束时间
+     */
+    awardEndDate?: string;
+    /**
+     * 当前页
+     */
+    current: number;
+    /**
+     * 每页返回数量
+     */
+    size: number;
+    /**
+     * 激励用户名
+     */
+    username?: string;
+  }
+  export interface awardsData {
+    /**
+     * 当前页数
+     */
+    current: number;
+    /**
+     * 所有的页数
+     */
+    pages: number;
+    records: Record[];
+    /**
+     * 传入的分页数量
+     */
+    size: number;
+    /**
+     * 所有的数量
+     */
+    total: number;
+  }
 }
 export async function getRanking<T>(params: RankApi.searchParams) {
   const result = await request<RankApi.Data>(
+    `/website/ranking-users?${stringify(params)}`,
+    {
+      onlyData: true,
+    }
+  );
+  return result;
+}
+
+export async function getAwards<T>(params: RankApi.awardsParams) {
+  const result = await request<RankApi.awardsData>(
     `/website/ranking-users?${stringify(params)}`,
     {
       onlyData: true,

@@ -19,3 +19,6 @@
 .rank-line-right {
   padding-left: 40px;
 }
+:where(.css-dev-only-do-not-override-1uula5r).ant-card .ant-card-head {
+  border-bottom: none;
+}

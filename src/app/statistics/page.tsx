@@ -1,19 +1,30 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { getCurrentMonth } from "@/utils/common/dateUtil";
 import Rank from "./rank";
 import EchartsPart from "./charts";
 import ViolationPart from "./violation";
-import { Card, Space, ConfigProvider } from "antd";
+import RankHistroy from "./rankHistroy";
+import { Card, Space, ConfigProvider, DatePicker } from "antd";
 import Image from "next/image";
 import "./ui/statistics.css";
-
+import type { DatePickerProps, GetProps } from "antd";
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
+const { RangePicker } = DatePicker;
+type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 const statisticsPage = () => {
-  console.log(1);
+  console.log(getCurrentMonth());
+  const [awardsTime, setAwardsTime] = useState<[start: Dayjs, end: Dayjs]>([
+    dayjs(getCurrentMonth()[0]),
+    dayjs(getCurrentMonth()[1]),
+  ]);
   useEffect(() => {
     console.log("statisticsPage useEffect");
   }, []);
-  const clickmapData = () => {
-    console.log("clickmapData");
+  const chooseAwaidsTime = (value: any) => {
+    console.log("clickmapData", value);
+    setAwardsTime(value);
   };
 
   return (
@@ -34,28 +45,29 @@ const statisticsPage = () => {
               height={422}
               style={{ margin: "0 auto" }}
               alt=""
-              // layout="responsive"
             />
           </div>
           <div className="text-white pl-12 text-xs">
             上月平台共收到捐赠$233，激励计划发放$200,详情查看（外部公共钱包链接）
           </div>
-          <Card title="本月绝育数量用户排行" extra={<a href="#">More</a>}>
+          <Card title="本月排行" extra={<a href="#">查看更多</a>}>
             <Rank></Rank>
           </Card>
-          {/* <Card title="本月被举报猫猫" onClick={clickmapData} extra={<a href="#">More</a>}>
-          <div >click</div>
-            <ViolationPart />
-          </Card> */}
-          {/* <div className="flex items-center">
-                <Image
-                  width={20}
-                  alt=""
-                  height={17}
-                  src="/img/icon_bi@2x.png"
-                />
-                <div className="ml-3">噶蛋币：{item.reward}</div>
-              </div> */}
+          <Card
+            title="激励明细"
+            extra={
+              <div>
+                <RangePicker
+                  allowClear={false}
+                  value={awardsTime}
+                  onChange={chooseAwaidsTime}
+                ></RangePicker>
+              </div>
+            }
+          >
+            <RankHistroy selectTime={awardsTime}></RankHistroy>
+          </Card>
+
           <Card title="噶蛋分布图" extra={<a href="#">More</a>}>
             <EchartsPart />
           </Card>
