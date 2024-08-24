@@ -6,7 +6,7 @@ import type { UserApi } from "@/api/user";
 import { WarningTwoTone } from "@ant-design/icons";
 
 import Image from "next/image";
-import "./profile.css";
+import "./personal.css";
 import DescribeImg from "@/app/component/describeImg";
 const initUserData: UserApi.Record = {
   realName: "",
@@ -14,7 +14,7 @@ const initUserData: UserApi.Record = {
   awardsDetails: [],
   pets: [],
 };
-const profilePage = (params: { id: String }) => {
+const personalPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState<UserApi.Record>(initUserData);
@@ -70,7 +70,7 @@ const profilePage = (params: { id: String }) => {
     }
   };
   return (
-    <div className="userPage">
+    <div className="personalPage">
       <div className="flex justify-center">
         <div className="flex mt-5">
           <div className="user-content-left p-10">
@@ -377,4 +377,4 @@ const profilePage = (params: { id: String }) => {
   );
 };
 
-export default profilePage;
+export default personalPage;

@@ -34,8 +34,8 @@ const Header: React.FC = () => {
           <Link href="/user" className="my-1">
             {t("link.user")}
           </Link>
-          <Link href="/profile" className="my-1">
-            {t("link.profile")}
+          <Link href="/personal" className="my-1">
+            {t("link.personal")}
           </Link>
         </div>
       </div>

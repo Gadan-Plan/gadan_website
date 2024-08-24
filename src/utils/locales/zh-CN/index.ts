@@ -3,7 +3,7 @@ export default {
     home: "首页",
     apply: "申请中心",
     statistics: "统计中心",
-    profile: "个人中心",
+    personal: "个人中心",
     user: "用户中心",
   },
   basic: {

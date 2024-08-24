@@ -3,7 +3,7 @@ export default {
     home: "Home",
     apply: "Application Center",
     statistics: "Statistics Center",
-    profile: "Profile Center",
+    personal: "Personal Center",
     user: "User Center",
   },
   apply: {

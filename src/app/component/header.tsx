@@ -30,7 +30,7 @@ const Header: React.FC = () => {
           <Link href="/apply">{t("link.apply")}</Link>
           <Link href="/statistics">{t("link.statistics")}</Link>
           <Link href="/user">{t("link.user")}</Link>
-          <Link href="/profile">{t("link.profile")}</Link>
+          <Link href="/personal">{t("link.personal")}</Link>
         </Col>
         <Col span={2} className="flex justify-center">
           <ConfigProvider
