@@ -9,10 +9,7 @@ import { useTranslation } from "react-i18next";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 const { TextArea } = Input;
 interface Props {
-  quillContent: string|undefined;
-  time: string;
-  name: string;
-  color: string;
+  onDescriptionChange: Function;
 }
 const getBase64 = (file: FileType): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -22,15 +19,15 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const DescribeImg: React.FC<Props> = ({ quillContent }) => {
-    const { t } = useTranslation();
-  const [content, setContent] = useState<string|undefined>();
+const DescribeImg: React.FC<Props> = ({ onDescriptionChange }) => {
+  const { t } = useTranslation();
+  const [content, setContent] = useState<string | undefined>();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  useEffect(() => {
-    setContent(quillContent);
-  }, [quillContent]);
+  // useEffect(() => {
+  //   setContent(quillContent);
+  // }, [quillContent]);
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as FileType);
@@ -41,6 +38,7 @@ const DescribeImg: React.FC<Props> = ({ quillContent }) => {
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+    onDescriptionChange(newFileList, "file");
   };
 
   const uploadButton = (
@@ -53,12 +51,12 @@ const DescribeImg: React.FC<Props> = ({ quillContent }) => {
     <div className={styles.describeImg}>
       <TextArea
         rows={4}
-        placeholder={t("describe.placeholder")}
+        placeholder={t("common.placeholder")}
         value={content}
         className={styles.describeTextarea}
         onChange={(e) => {
-          console.log(e);
-          setContent(e.target.value)
+          setContent(e.target.value);
+          onDescriptionChange(e.target.value, "word");
         }}
       />
 
@@ -66,7 +64,7 @@ const DescribeImg: React.FC<Props> = ({ quillContent }) => {
         action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
         listType="picture-card"
         fileList={fileList}
-        className='describeUpload'
+        className="describeUpload"
         onPreview={handlePreview}
         onChange={handleChange}
       >

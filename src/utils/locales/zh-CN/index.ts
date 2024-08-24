@@ -12,7 +12,9 @@ export default {
     character3: "田园",
     character4: "混血",
   },
-  common: {},
+  common: {
+    placeholder: "请输入",
+  },
   apply: {
     figure: "猫猫形象",
     tone: "色调",
@@ -39,9 +41,7 @@ export default {
     guide2: "出生月和噶蛋日都可以填写估算日期嗷!",
     nftGuide: "这里就是最终的NFT效果啦!",
   },
-  describe: {
-    placeholder: "这里可以写一写猫猫的日常",
-  },
+  describe: {},
 
   header: {
     slogen: "噶蛋计划",

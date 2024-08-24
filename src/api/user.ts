@@ -175,6 +175,30 @@ export namespace UserApi {
     walletAddres: string;
     [property: string]: any;
   }
+
+  export interface QuillContent {
+    /**
+     * 描述id
+     */
+    contentId: number;
+    /**
+     * 描述图片ids
+     */
+    contentImgIds?: string[];
+    /**
+     * 描述图片urls
+     */
+    contentImgUrls?: string[];
+    /**
+     * 描述文字
+     */
+    contentText?: string;
+    /**
+     * 创建描述的时间
+     */
+    creatTime: string;
+    [property: string]: any;
+  }
   export interface Pet {
     /**
      * 省份城市
@@ -254,8 +278,13 @@ export namespace UserApi {
      * true:有效 false:无效    默认true
      */
     valid: boolean;
+    /**
+     * 具体描述  返回的地方根据时间排序  最近的改动放在最上面
+     */
+    quillContent?: QuillContent[];
     [property: string]: any;
   }
+
   /**
    * 所在国家  ’CN‘中国
    */
@@ -290,6 +319,14 @@ export async function getUserById<T>(params: { id: String }) {
       onlyData: true,
     }
   );
+  return result;
+}
+
+//个人详情
+export async function getPersonalDetails<T>() {
+  const result = await request<UserApi.Data>(`/website/personalDetails`, {
+    onlyData: true,
+  });
   return result;
 }
 
