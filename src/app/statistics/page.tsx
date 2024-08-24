@@ -50,7 +50,10 @@ const statisticsPage = () => {
           <div className="text-white pl-12 text-xs">
             上月平台共收到捐赠$233，激励计划发放$200,详情查看（外部公共钱包链接）
           </div>
-          <Card title="本月排行" extra={<a href="#">查看更多</a>}>
+          <Card
+            title="本月排行"
+            extra={<div className="main-color">查看更多</div>}
+          >
             <Rank></Rank>
           </Card>
           <Card

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
@@ -14,6 +14,25 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
+} */
+/* 滚动条整体样式 */
+::-webkit-scrollbar {
+  width: 6px; /* 滚动条宽度 */
+  height: 6px; /* 垂直滚动条高度 */
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 169, 64, 0.5); /* 滑块颜色 */
+  border-radius: 10px; /* 滑块边角圆滑度 */
+  /* 可以在这里添加更多样式，如边框等 */
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 轨道颜色 */
+  border-radius: 10px; /* 轨道边角圆滑度 */
+  /* 可以在这里添加更多样式，如边框等 */
 }
 
 @font-face {
@@ -26,15 +45,16 @@ body {
   font-family: PingFangSC-Regular, Roboto, Helvetica Neue, Helvetica, Tahoma,
     Arial, PingFang SC-Light, Microsoft YaHei, "MuyaoFont";
   font-size: 14px;
+  color: #2c2019;
   margin: 0;
   padding: 0;
-  color: rgb(var(--foreground-rgb));
+  /* color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
+    rgb(var(--background-start-rgb)); */
 }
 
 @layer utilities {
@@ -42,7 +62,14 @@ body {
     text-wrap: balance;
   }
 }
-a:link,
-a:hover {
+.main-color {
   color: #ffa940;
+}
+
+.main-family {
+  font-family: "MuyaoFont";
+}
+img,
+video {
+  height: unset;
 }

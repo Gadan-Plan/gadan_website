@@ -1,14 +1,6 @@
-.user-header {
-  height: 200px;
-  background-image: linear-gradient(#fbd24f, #fbb74f);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
 .user-header-search {
   width: 700px;
-  margin-top: 100px;
+  margin-top: -60px;
   height: 40px;
   display: flex;
   justify-content: center;
@@ -16,6 +8,7 @@
   border-radius: 25px;
   align-items: center;
   padding: 0 2px;
+  position: relative;
 }
 .user-header-input {
   border: none;
@@ -25,6 +18,79 @@
 :where(.css-dev-only-do-not-override-1045eyd).antinput-outlined:focus-within {
   box-shadow: none;
 }
+.searchResult {
+  width: 1260px;
+  padding: 30px 40px 30px 40px;
+}
+.user-content-body {
+}
+
 .user-content-left {
   background-color: #fff;
+  border-radius: 20px;
+  width: 340px;
+  margin-right: 20px;
+}
+.user-content-right {
+  border-radius: 20px;
+  width: 830px;
+  position: relative;
+  border-radius: 20px;
+  padding: 20px 40px 40px 30px;
+  background-color: #fff;
+  z-index: 1;
+}
+.user-content-point-right {
+  width: 780px;
+}
+.user-content-right-top {
+  width: 100%;
+  height: 40px;
+  background: rgba(251, 200, 79, 0.1);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+.user-awards-card {
+  background-color: rgba(255, 169, 64, 0.2); /* 卡片背景色 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
+  margin: 10px;
+  border-radius: 4px;
+  padding: 10px;
+}
+.user-content-point {
+  width: 18px;
+  height: 18px;
+  background-color: #ececec;
+  border-radius: 50%;
+}
+
+.user-pets-details-line {
+  color: #fbc44f;
+  width: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-pets-line-top {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid;
+}
+.user-pets-line-under {
+  width: 1px;
+  border-left: 1px solid;
+  height: calc(100% - 11px);
+}
+.user-pets-details-des {
+  width: calc(100% - 28px);
+}
+
+.user-pets-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
 }

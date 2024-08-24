@@ -152,7 +152,7 @@ export namespace RankApi {
      * 所有的页数
      */
     pages: number;
-    records: Record[];
+    records: awardsRecord[];
     /**
      * 传入的分页数量
      */
@@ -161,6 +161,68 @@ export namespace RankApi {
      * 所有的数量
      */
     total: number;
+  }
+  export interface awardsRecord {
+    /**
+     * 激励所属年月 ’2024-04‘
+     */
+    awardMonth: string;
+    /**
+     * 本次获得的噶蛋coin
+     */
+    awardsPNC: number;
+    /**
+     * 本次获得的代币种类  比如ETH BTC LTC BNB
+     */
+    awardsTockenType?: string;
+    /**
+     * 浮点数6位小数  本次获得的代币值
+     */
+    awardsToken?: number;
+    /**
+     * 激励用户id
+     */
+    awardUserId: number;
+    /**
+     * 创建时间
+     */
+    createTime: string;
+    /**
+     * 捐赠组织链接 官网
+     */
+    donationLink: string;
+    /**
+     * 捐赠组织
+     */
+    donationOwner: string;
+    /**
+     * ID 编号
+     */
+    id: number;
+    /**
+     * 排名
+     */
+    rank: number;
+    /**
+     * 激励用户名
+     */
+    realName: string;
+    /**
+     * 激励名称
+     */
+    title: string;
+    /**
+     * 更新时间
+     */
+    updateTime?: string;
+    /**
+     * 激励用户登录名
+     */
+    username: string;
+    /**
+     * 钱包地址
+     */
+    walletAddres: string;
   }
 }
 export async function getRanking<T>(params: RankApi.searchParams) {

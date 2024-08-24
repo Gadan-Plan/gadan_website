@@ -3,15 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Input, Button, ConfigProvider, Row, Col } from "antd";
 import Image from "next/image";
 import "./user.css";
+import Link from "next/link";
 import type { GetProps } from "antd";
-
+import { getUser } from "@/api/user";
+import type { UserApi } from "@/api/user";
 type SearchProps = GetProps<typeof Input.Search>;
-const { Search } = Input;
 const userPage = () => {
   const [searchValue, setSearchValue] = useState<string>();
   const [searchLoading, setSearchLoading] = useState(false);
-  useEffect(() => {}, []);
-  const onSearch = (value) => {
+  const onSearch = (value: any) => {
     console.log(value);
 
     setSearchLoading(true);
@@ -21,43 +21,111 @@ const userPage = () => {
     }, 2000);
   };
 
+  const [userList, setuserList] = useState<any>([]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const result: UserApi.Data = await getUser({
+          searchName: "2024-04-23",
+          current: 1,
+          size: 9999,
+        });
+        console.log("result", result);
+        const allResult = result.records
+          .concat(result.records)
+          .concat(result.records)
+          .concat(result.records)
+          .concat(result.records)
+          .concat(result.records)
+          .concat(result.records)
+          .concat(result.records);
+        console.log("allResult.length", allResult.length);
+        setuserList(allResult);
+      } catch (error) {
+        console.error("Failed to fetch ranking:", error);
+      }
+    };
+
+    fetchUser(); // 调用函数以获取数据
+  }, []);
+
   return (
-    <div className="userPage">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#FFA940",
-            borderRadius: 25,
-          },
-        }}
-      >
-        <div className="user-header">
-          <div className="user-header-search">
-            <Input value={searchValue} className="user-header-input"></Input>
-            <Button type="primary" loading={searchLoading} onClick={onSearch}>
-              查询
-            </Button>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#FFA940",
+          borderRadius: 25,
+        },
+      }}
+    >
+      <div className="flex justify-center">
+        <div className="user-header-search">
+          <Input value={searchValue} className="user-header-input"></Input>
+          <Button type="primary" loading={searchLoading} onClick={onSearch}>
+            查询
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex justify-center ">
+        <div className="bg-white rounded-3xl mt-5 mb-8 searchResult">
+          <div className="text-lg">搜索结果({userList.length})</div>
+          <div>
+            {userList.map((item: any, index: number) => {
+              return (
+                <Link href={`/user/${item.id}`} key={index}>
+                  <div
+                    className="flex  justify-between py-7"
+                    style={{ borderBottom: "1px solid #F3F3F3" }}
+                  >
+                    <div className="flex items-center w-4/12">
+                      <Image
+                        width={80}
+                        alt=""
+                        height={80}
+                        className="rounded-full"
+                        src="/img/header.jpg"
+                      />
+                      <div className="ml-4">
+                        <div className="text-lg font-bold">{item.realName}</div>
+                        <div className="text-sm" style={{ color: "#6D7280" }}>
+                          {item.address}
+                        </div>
+                        <div className="text-sm" style={{ color: "#6D7280" }}>
+                          猫猫数量:{item.petsNum}
+                        </div>
+                      </div>
+                    </div>
+                    <div className=" flex justify-around">
+                      {item.pets &&
+                        item.pets.map(
+                          (petItem: UserApi.Pet, petIndex: number) => {
+                            return (
+                              <div
+                                key={petIndex}
+                                className="w-14 flex flex-col items-center"
+                              >
+                                <Image
+                                  width={50}
+                                  alt=""
+                                  height={50}
+                                  className="rounded-lg"
+                                  src="/img/caicai.png"
+                                />
+                                <div className="">{petItem.name}</div>
+                              </div>
+                            );
+                          }
+                        )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
-        <div className="user-content">
-          <Row>
-            <Col span={8}>
-              <div className="user-content-left">
-                <Image width={50} alt="" height={50} src="/img/header.jpg" />
-                <div>李大胖</div>
-                <div>浙江 宁波|保姆</div>
-                <div>钱包地址:0x84030aDE17E52247aE36ba625EB8f7019CbBd2dA</div>
-                <div></div>
-                <div>
-                  <Image width={50} alt="" height={50} src="/img/header.jpg" />
-                </div>
-              </div>
-            </Col>
-            <Col span={14}></Col>
-          </Row>
-        </div>
-      </ConfigProvider>
-    </div>
+      </div>
+    </ConfigProvider>
   );
 };
 
