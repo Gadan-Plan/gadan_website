@@ -4,10 +4,9 @@ import { Tooltip, Modal, Button, ConfigProvider } from "antd";
 import { getPersonalDetails } from "@/api/user";
 import type { UserApi } from "@/api/user";
 import { WarningTwoTone } from "@ant-design/icons";
-
+import PersonalEdit from "../component/personalEdit/personalEdit";
 import Image from "next/image";
 import "./personal.css";
-import DescribeImg from "@/app/component/describeImg";
 const initUserData: UserApi.Record = {
   realName: "",
   address: [],
@@ -37,10 +36,12 @@ const personalPage = () => {
 
     fetchUser(); // 调用函数以获取数据
   }, []);
-  const showModal = () => {
+  const showChangeModal = () => {
     setIsModalOpen(true);
   };
-
+  const changePersonal = (dataFrom) => {
+    console.log("pa", dataFrom);
+  };
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
@@ -59,18 +60,50 @@ const personalPage = () => {
     reportImgIds: [],
     reportImgUrls: [],
   });
-  const handleDescriptionChange = (details, type) => {
-    if (type == "word") {
-      setReportData({
-        reportText: details,
-        reportImgUrls: reportData.reportImgUrls,
-        reportImgIds: reportData.reportImgIds,
-      });
-    } else {
-    }
-  };
+  const personalEdit = null;
   return (
     <div className="personalPage">
+      <div className="bg-white flex justify-center">
+        <div
+          className="flex justify-between py-10 items-center"
+          style={{ width: "1240px" }}
+        >
+          <div className="flex">
+            <Image
+              width={100}
+              alt=""
+              className="rounded-full"
+              height={100}
+              src="/img/header.jpg"
+            />
+            <div className="ml-3.5">
+              <div className="text-xl font-bold">李大胖</div>
+              <div className="second-color leading-6">浙江 宁波</div>
+              <div className="second-color leading-6">
+                用户名:123456789@qq.com
+              </div>
+              <div className="second-color leading-6">
+                钱包地址:0x84030aDE17E52247aE36ba625EB8f7019CbBd2dA
+              </div>
+            </div>
+          </div>
+          <div>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: "#FFA940",
+                  borderRadius: 25,
+                },
+              }}
+            >
+              <Button onClick={showChangeModal}>编辑资料</Button>
+              <Button type="primary" className="ml-2.5">
+                手绘画板
+              </Button>
+            </ConfigProvider>
+          </div>
+        </div>
+      </div>
       <div className="flex justify-center">
         <div className="flex mt-5">
           <div className="user-content-left p-10">
@@ -233,10 +266,7 @@ const personalPage = () => {
                 <div className="p-7">
                   <div className=" flex justify-between">
                     <div className="text-lg font-bold">猫猫档案</div>
-                    <div
-                      className="flex items-center cursor-grabbing "
-                      onClick={showModal}
-                    >
+                    <div className="flex items-center cursor-grabbing ">
                       <Image
                         width={12}
                         alt=""
@@ -350,7 +380,7 @@ const personalPage = () => {
         }}
       >
         <Modal
-          title="举报原因"
+          title="修改个人资料"
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -368,9 +398,10 @@ const personalPage = () => {
             </Button>,
           ]}
         >
-          <DescribeImg
-            onDescriptionChange={handleDescriptionChange}
-          ></DescribeImg>
+          <PersonalEdit
+            ref={personalEdit}
+            onChangePersonal={changePersonal}
+          ></PersonalEdit>
         </Modal>
       </ConfigProvider>
     </div>

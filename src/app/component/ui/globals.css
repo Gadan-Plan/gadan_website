@@ -69,7 +69,6 @@ body {
 .main-family {
   font-family: "MuyaoFont";
 }
-img,
-video {
-  height: unset;
+.second-color {
+  color: #6d7280;
 }
