@@ -2,13 +2,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Tooltip, Modal, Button, ConfigProvider } from "antd";
 import { getUserById } from "@/api/user";
-import type { UserApi } from "@/api/user";
+import type {} from "@/api/user";
+import { UserData, Pet, FileData } from "@/api/dataType";
 import { WarningTwoTone } from "@ant-design/icons";
 
 import Image from "next/image";
 import "../user.css";
 import DescribeImg from "@/app/component/describeImg";
-const initUserData: UserApi.Record = {
+const initUserData: UserData = {
+  userHeader: {
+    url: "",
+    id: "",
+  },
+  id: 1,
+  username: "",
   realName: "",
   address: [],
   awardsDetails: [],
@@ -17,28 +24,17 @@ const initUserData: UserApi.Record = {
 const UserDetails = (params: { id: String }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState<UserApi.Record>(initUserData);
-  const [currentCats, setCurrentCats] = useState<UserApi.Pet>({
+  const [userData, setUserData] = useState<UserData>(initUserData);
+  const [currentCats, setCurrentCats] = useState<Pet>({
+    name: "",
     quillContent: [],
   });
   const point = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result: UserApi.Record = await getUserById({ id: params.id });
+        const result: UserData = await getUserById({ id: params.id });
         console.log("result", result);
-        // result.pets = result.pets
-        //   .concat(result.pets)
-        //   .concat(result.pets)
-        //   .concat(result.pets);
-        // result.awardsDetails = result.awardsDetails
-        //   .concat(result.awardsDetails)
-        //   .concat(result.awardsDetails)
-        //   .concat(result.awardsDetails);
-        // result.pets[0].quillContent = result.pets[0].quillContent
-        //   .concat(result.pets[0].quillContent)
-        //   .concat(result.pets[0].quillContent)
-        //   .concat(result.pets[0].quillContent);
         setUserData(result);
         setCurrentCats(result.pets[0]);
       } catch (error) {
@@ -70,7 +66,7 @@ const UserDetails = (params: { id: String }) => {
     reportImgIds: [],
     reportImgUrls: [],
   });
-  const handleDescriptionChange = (details, type) => {
+  const handleDescriptionChange = (details: any, type: string) => {
     if (type == "word") {
       setReportData({
         reportText: details,
@@ -100,7 +96,7 @@ const UserDetails = (params: { id: String }) => {
                 {userData.realName}
               </div>
               <div style={{ color: "#6D7280" }}>
-                {userData.address.join(" ")}
+                {userData.address?.join(" ")}
               </div>
               <div className="break-all">
                 钱包地址:0x84030aDE17E52247aE36ba625EB8f7019CbBd2dA
@@ -311,8 +307,8 @@ const UserDetails = (params: { id: String }) => {
                               <div className="user-pets-details-des">
                                 <div>{item.contentText}</div>
                                 <div className="flex">
-                                  {item.contentImgUrls &&
-                                    item.contentImgUrls?.map(
+                                  {item.contentImgs &&
+                                    item.contentImgs?.map(
                                       (children, chilrenIndex) => {
                                         return (
                                           <div
@@ -323,7 +319,7 @@ const UserDetails = (params: { id: String }) => {
                                               width={100}
                                               alt=""
                                               height={100}
-                                              src={children}
+                                              src={children.url}
                                             />
                                           </div>
                                         );

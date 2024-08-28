@@ -1,18 +1,17 @@
-// "use client";
 import React, { useState, useEffect } from "react";
 import { getAwards } from "@/api/rank";
-import type { RankApi } from "@/api/rank";
-import { Space, Table, Tag } from "antd";
-import type { TableProps } from "antd";
+import type { AwardsData } from "@/api/rank";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
-import Image from "next/image";
+import type { AwardsDetail } from "@/api/dataType";
+import { Table } from "antd";
 import "./ui/statistics.css";
+
 const tableWidth = 120;
 const tableColumns = [
   {
-    dataIndex: "username",
-    key: "username",
+    dataIndex: "realName",
+    key: "realName",
     title: "激励用户",
     width: tableWidth,
   },
@@ -67,15 +66,18 @@ const tableColumns = [
     width: tableWidth,
   },
 ];
-function RankHistroy({ selectTime }) {
-  const [awardData, setAwardData] = useState<RankApi.awardsRecord[]>([]);
+interface Props {
+  selectTime: [start: Dayjs, end: Dayjs];
+}
+const RankHistroy: React.FC<Props> = ({ selectTime }) => {
+  const [awardData, setAwardData] = useState<AwardsDetail[]>([]);
   useEffect(() => {
     const fetchAwards = async () => {
       console.log("awardEndDate", selectTime);
       try {
-        const result: RankApi.Data = await getAwards({
-          awardBeginDate: "2024-04-23",
-          awardEndDate: "2024-05-23",
+        const result: AwardsData = await getAwards({
+          awardBeginDate: dayjs(selectTime[0]).format("YYYY-MM-DD"),
+          awardEndDate: dayjs(selectTime[1]).format("YYYY-MM-DD"),
           current: 1,
           size: 10,
         });
@@ -103,6 +105,6 @@ function RankHistroy({ selectTime }) {
       <Table columns={tableColumns} dataSource={awardData} />
     </div>
   );
-}
+};
 
 export default RankHistroy;

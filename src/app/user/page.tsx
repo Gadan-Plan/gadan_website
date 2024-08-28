@@ -6,27 +6,40 @@ import "./user.css";
 import Link from "next/link";
 import type { GetProps } from "antd";
 import { getUser } from "@/api/user";
-import type { UserApi } from "@/api/user";
-type SearchProps = GetProps<typeof Input.Search>;
+import type { Data } from "@/api/user";
+import type { Pet } from "@/api/dataType";
 const userPage = () => {
   const [searchValue, setSearchValue] = useState<string>();
   const [searchLoading, setSearchLoading] = useState(false);
-  const onSearch = (value: any) => {
+  const onSearch = async (value: any) => {
     console.log(value);
 
     setSearchLoading(true);
     setSearchValue(value);
-    setTimeout(() => {
-      setSearchLoading(false);
-    }, 2000);
+    const result: Data = await getUser({
+      searchName: value,
+      current: 1,
+      size: 9999,
+    });
+    console.log("result", result);
+    const allResult = result.records
+      .concat(result.records)
+      .concat(result.records)
+      .concat(result.records)
+      .concat(result.records)
+      .concat(result.records)
+      .concat(result.records)
+      .concat(result.records);
+    console.log("allResult.length", allResult.length);
+    setuserList(allResult);
+    setSearchLoading(false);
   };
 
   const [userList, setuserList] = useState<any>([]);
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result: UserApi.Data = await getUser({
-          searchName: "2024-04-23",
+        const result: Data = await getUser({
           current: 1,
           size: 9999,
         });
@@ -98,25 +111,23 @@ const userPage = () => {
                     </div>
                     <div className=" flex justify-around">
                       {item.pets &&
-                        item.pets.map(
-                          (petItem: UserApi.Pet, petIndex: number) => {
-                            return (
-                              <div
-                                key={petIndex}
-                                className="w-14 flex flex-col items-center"
-                              >
-                                <Image
-                                  width={50}
-                                  alt=""
-                                  height={50}
-                                  className="rounded-lg"
-                                  src="/img/caicai.png"
-                                />
-                                <div className="">{petItem.name}</div>
-                              </div>
-                            );
-                          }
-                        )}
+                        item.pets.map((petItem: Pet, petIndex: number) => {
+                          return (
+                            <div
+                              key={petIndex}
+                              className="w-14 flex flex-col items-center"
+                            >
+                              <Image
+                                width={50}
+                                alt=""
+                                height={50}
+                                className="rounded-lg"
+                                src="/img/caicai.png"
+                              />
+                              <div className="">{petItem.name}</div>
+                            </div>
+                          );
+                        })}
                     </div>
                   </div>
                 </Link>

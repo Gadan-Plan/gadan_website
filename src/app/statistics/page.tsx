@@ -3,25 +3,19 @@ import React, { useState, useEffect } from "react";
 import { getCurrentMonth } from "@/utils/common/dateUtil";
 import Rank from "./rank";
 import EchartsPart from "./charts";
-import ViolationPart from "./violation";
 import RankHistroy from "./rankHistroy";
 import { Card, Space, ConfigProvider, DatePicker } from "antd";
 import Image from "next/image";
 import "./ui/statistics.css";
-import type { DatePickerProps, GetProps } from "antd";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 const { RangePicker } = DatePicker;
-type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 const statisticsPage = () => {
-  console.log(getCurrentMonth());
   const [awardsTime, setAwardsTime] = useState<[start: Dayjs, end: Dayjs]>([
     dayjs(getCurrentMonth()[0]),
     dayjs(getCurrentMonth()[1]),
   ]);
-  useEffect(() => {
-    console.log("statisticsPage useEffect");
-  }, []);
+
   const chooseAwaidsTime = (value: any) => {
     console.log("clickmapData", value);
     setAwardsTime(value);

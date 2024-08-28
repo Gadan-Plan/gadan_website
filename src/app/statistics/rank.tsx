@@ -1,21 +1,22 @@
 // "use client";
 import React, { useState, useEffect } from "react";
 import { getRanking } from "@/api/rank";
-import type { RankApi } from "@/api/rank";
-import { getFirstAndLastN } from "@/utils/common/helper";
+import type { RankRecord, Data } from "@/api/rank";
+import { getCurrentMonth } from "@/utils/common/dateUtil";
 import Image from "next/image";
 import "./ui/statistics.css";
 function RankPart() {
-  const [rankingData, setRankingData] = useState<
-    [RankApi.Record[], RankApi.Record[]]
-  >([[], []]);
+  const [rankingData, setRankingData] = useState<[RankRecord[], RankRecord[]]>([
+    [],
+    [],
+  ]);
   useEffect(() => {
     console.log("useEffect is running");
     const fetchRanking = async () => {
       try {
-        const result: RankApi.Data = await getRanking({
-          rankBeginDate: "2024-04-23",
-          rankEndDate: "2024-05-23",
+        const result: Data = await getRanking({
+          rankBeginDate: getCurrentMonth()[0],
+          rankEndDate: getCurrentMonth()[1],
           current: 1,
           size: 10,
         });
@@ -41,7 +42,7 @@ function RankPart() {
   return (
     <div className="px-2 flex justify-between items-stretch">
       <div className="w-6/12 rank-line-left">
-        {rankingData[0].map((item: RankApi.Record, index) => {
+        {rankingData[0].map((item: RankRecord, index) => {
           return (
             <div className="flex  justify-between" key={index}>
               <div className="flex items-center w-8/12">
@@ -77,7 +78,7 @@ function RankPart() {
         })}
       </div>
       <div className="  w-6/12 rank-line-right">
-        {rankingData[1].map((item: RankApi.Record, index) => {
+        {rankingData[1].map((item: RankRecord, index) => {
           return (
             <div className="flex  justify-between" key={index}>
               <div className="flex items-center w-8/12">

@@ -17,9 +17,10 @@ import {
   Cascader,
 } from "antd";
 import type { GetProp, UploadProps } from "antd";
-import type { selectType, applicationForm } from "./type";
+import { addPet } from "@/api/user";
+import type { AddPetParams } from "@/api/user";
+import type { QuillContent } from "@/api/dataType";
 import NFTCanvas from "./logoCreator";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
 import addressOption from "@/utils/address/provinces-cities.json";
@@ -66,26 +67,18 @@ const ApplyPage = () => {
   const { t } = useTranslation();
   const [chooseColor, setChooseColor] = useState("#FFA940");
   const [loading, setLoading] = useState(false);
-  const [fromData, setFromData] = useState<applicationForm>({
-    id: 22121,
+  const [fromData, setFromData] = useState<AddPetParams>({
     gender: "male",
     neuterTime: formatToDate(),
     birthMonth: getPreAfterMonth(-6, "YYYY-MM"),
     status: "1",
     name: "咪咪",
-    quillContent: {
-      contentText: "今天我捡了一只猫",
-      contentImgId: [
-        "1709876541",
-        "1709876542",
-        "1709876543",
-        "1709876544",
-        "1709876545",
-      ],
-    },
     country: "CN",
     address: ["浙江", "杭州"],
-    petHeaderId: "1709876544",
+    petHeader: {
+      url: "",
+      id: "",
+    },
     character: ["1"],
   });
 
@@ -96,9 +89,6 @@ const ApplyPage = () => {
     { value: "4", label: t("basic.character4") },
   ];
 
-  useEffect(() => {
-    //   console.log(dayjs(new Date()).format('YYYY-MM-DD'));
-  }, []);
   //猫猫标识
   const changeHeaderUrl: UploadProps["onChange"] = (info) => {
     if (info.file.status === "uploading") {
@@ -109,20 +99,36 @@ const ApplyPage = () => {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj as FileType, (url) => {
         setLoading(false);
-        fromData.headerImageUrl = url;
       });
     }
     getBase64(info.file.originFileObj as FileType, (url) => {
       setLoading(false);
-      fromData.headerImageUrl = url;
     });
   };
 
   //提交
   const handleSubmit = () => {
     console.log("handleSubmit", fromData);
+    addPet(fromData).then(() => {
+      message.success("申请成功");
+    });
   };
-
+  const handleDescriptionChange = (details: any, type: string) => {
+    const newQuillContent: QuillContent[] = fromData.quillContent || [];
+    if (type == "word") {
+      newQuillContent[0].contentText = details;
+      setFromData((prevFromData: AddPetParams) => ({
+        ...prevFromData,
+        quillContent: newQuillContent,
+      }));
+    } else {
+      newQuillContent[0].contentImgs = details;
+      setFromData((prevFromData: AddPetParams) => ({
+        ...prevFromData,
+        quillContent: newQuillContent,
+      }));
+    }
+  };
   return (
     <>
       <div className="flex py-40 relative  justify-center">
@@ -166,9 +172,9 @@ const ApplyPage = () => {
                       beforeUpload={beforeUpload}
                       onChange={changeHeaderUrl}
                     >
-                      {fromData.headerImageUrl ? (
+                      {fromData.petHeader ? (
                         <Image
-                          src={fromData.headerImageUrl}
+                          src={fromData.petHeader?.url}
                           alt="avatar"
                           width={300}
                           height={300}
@@ -214,7 +220,7 @@ const ApplyPage = () => {
                       placeholder="🐱"
                       value={fromData.name}
                       onChange={(e) => {
-                        setFromData((prevFromData: applicationForm) => ({
+                        setFromData((prevFromData: AddPetParams) => ({
                           ...prevFromData,
                           name: e.target.value,
                         }));
@@ -237,7 +243,7 @@ const ApplyPage = () => {
                       allowClear={false}
                       value={dayjs(fromData.neuterTime)}
                       onChange={(date) => {
-                        setFromData((prevFromData: applicationForm) => ({
+                        setFromData((prevFromData: AddPetParams) => ({
                           ...prevFromData,
                           neuterTime: dayjs(date).format("YYYY-MM-DD"),
                         }));
@@ -249,7 +255,7 @@ const ApplyPage = () => {
             </Col>
             <Col span={12}>
               <NFTCanvas
-                base64Url={fromData.headerImageUrl}
+                base64Url={fromData.petHeader?.url}
                 time={dayjs(fromData.neuterTime).format("YYYY-MM-DD")}
                 name={fromData.name}
                 color={chooseColor}
@@ -277,7 +283,7 @@ const ApplyPage = () => {
                   ]}
                   value={fromData.gender}
                   onChange={(e) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: AddPetParams) => ({
                       ...prevFromData,
                       gender: e.target.value,
                     }));
@@ -300,7 +306,7 @@ const ApplyPage = () => {
                   allowClear={false}
                   value={dayjs(fromData.birthMonth)}
                   onChange={(date) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: AddPetParams) => ({
                       ...prevFromData,
                       birthMonth: dayjs(date).format("YYYY-MM"),
                     }));
@@ -322,7 +328,7 @@ const ApplyPage = () => {
                   allowClear={false}
                   showSearch
                   onChange={(e: any) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: AddPetParams) => ({
                       ...prevFromData,
                       country: e,
                     }));
@@ -344,7 +350,7 @@ const ApplyPage = () => {
                     allowClear={false}
                     placeholder="please choose"
                     onChange={(e) => {
-                      setFromData((prevFromData: applicationForm) => ({
+                      setFromData((prevFromData: AddPetParams) => ({
                         ...prevFromData,
                         address: e,
                       }));
@@ -368,7 +374,7 @@ const ApplyPage = () => {
                   ]}
                   value={fromData.status}
                   onChange={(e: any) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: AddPetParams) => ({
                       ...prevFromData,
                       status: e.target.value,
                     }));
@@ -388,7 +394,7 @@ const ApplyPage = () => {
                   placeholder="please select"
                   options={characterOptions}
                   onChange={(e: any) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: AddPetParams) => ({
                       ...prevFromData,
                       character: e,
                     }));
@@ -402,7 +408,9 @@ const ApplyPage = () => {
               <span>{t("apply.story")}: </span>
             </Col>
             <Col span={12}>
-              <DescribeImg quillContent={fromData.quillContent}></DescribeImg>
+              <DescribeImg
+                onDescriptionChange={handleDescriptionChange}
+              ></DescribeImg>
             </Col>
           </Row>
           <Row>

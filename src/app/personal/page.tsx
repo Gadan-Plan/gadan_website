@@ -60,7 +60,6 @@ const personalPage = () => {
     reportImgIds: [],
     reportImgUrls: [],
   });
-  const personalEdit = null;
   return (
     <div className="personalPage">
       <div className="bg-white flex justify-center">
@@ -398,10 +397,7 @@ const personalPage = () => {
             </Button>,
           ]}
         >
-          <PersonalEdit
-            ref={personalEdit}
-            onChangePersonal={changePersonal}
-          ></PersonalEdit>
+          <PersonalEdit onChangePersonal={changePersonal}></PersonalEdit>
         </Modal>
       </ConfigProvider>
     </div>
