@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Tooltip, Modal, Button, ConfigProvider } from "antd";
-import { getUserById } from "@/api/user";
-import type {} from "@/api/user";
-import { UserData, Pet, FileData } from "@/api/dataType";
+import { getUserById, reportPet } from "@/api/user";
+import type { ReportParams } from "@/api/user";
+import { UserData, Pet, Description } from "@/api/dataType";
 import { WarningTwoTone } from "@ant-design/icons";
-
 import Image from "next/image";
 import "../user.css";
 import DescribeImg from "@/app/component/describeImg";
@@ -14,7 +13,7 @@ const initUserData: UserData = {
     url: "",
     id: "",
   },
-  id: 1,
+  id: "",
   username: "",
   realName: "",
   address: [],
@@ -29,31 +28,33 @@ const UserDetails = (params: { id: String }) => {
     name: "",
     quillContent: [],
   });
-  const point = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+  const fetchUser = async () => {
+    try {
+      const result: UserData = await getUserById({ id: params.id });
+      console.log("result", result);
+      setUserData(result);
+      setCurrentCats(result.pets[0]);
+    } catch (error) {
+      console.error("Failed to fetch ranking:", error);
+    }
+  };
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const result: UserData = await getUserById({ id: params.id });
-        console.log("result", result);
-        setUserData(result);
-        setCurrentCats(result.pets[0]);
-      } catch (error) {
-        console.error("Failed to fetch ranking:", error);
-      }
-    };
-
     fetchUser(); // 调用函数以获取数据
   }, []);
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setIsModalOpen(false);
-    }, 3000);
+    try {
+      await reportPet(reportData);
+    } catch (error) {
+      console.error("Failed to fetch ranking:", error);
+    }
+    setLoading(false);
+    setIsModalOpen(false);
+    fetchUser();
   };
   const choosePets = (index: number) => {
     setCurrentCats(userData.pets[index]);
@@ -61,21 +62,19 @@ const UserDetails = (params: { id: String }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const [reportData, setReportData] = useState({
-    reportText: undefined,
-    reportImgIds: [],
-    reportImgUrls: [],
+  const [reportData, setReportData] = useState<ReportParams>({
+    petsId: currentCats.id,
+    reportText: "",
+    reportImgs: [],
   });
-  const handleDescriptionChange = (details: any, type: string) => {
-    if (type == "word") {
-      setReportData({
-        reportText: details,
-        reportImgUrls: reportData.reportImgUrls,
-        reportImgIds: reportData.reportImgIds,
-      });
-    } else {
-    }
+  const handleDescriptionChange = (dataForm: Description) => {
+    setReportData({
+      petsId: currentCats.id,
+      reportText: dataForm.content,
+      reportImgs: dataForm.fileList,
+    });
   };
+
   return (
     <div className="userPage">
       <div className="flex justify-center">

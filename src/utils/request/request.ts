@@ -90,7 +90,7 @@ function parseData<T>(
  */
 export default async function request<T>(
   url: string,
-  options?: Options
+  options?: any
 ): Promise<T> {
   const token = await getToken();
   const newOptions: RequestInit = {

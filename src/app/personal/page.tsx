@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Tooltip, Modal, Button, ConfigProvider } from "antd";
-import { getPersonalDetails } from "@/api/user";
-import type { UserApi } from "@/api/user";
+import { getPersonalDetails, editUserDetails } from "@/api/user";
+import { UserData, Pet } from "@/api/dataType";
+import type { editUserParams } from "@/api/user";
 import { WarningTwoTone } from "@ant-design/icons";
 import PersonalEdit from "../component/personalEdit/personalEdit";
 import Image from "next/image";
 import "./personal.css";
-const initUserData: UserApi.Record = {
+const initUserData: UserData = {
   realName: "",
   address: [],
   awardsDetails: [],
@@ -16,38 +17,45 @@ const initUserData: UserApi.Record = {
 const personalPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState<UserApi.Record>(initUserData);
-  const [currentCats, setCurrentCats] = useState<UserApi.Pet>({
+  const [userData, setUserData] = useState<UserData>(initUserData);
+  const [currentCats, setCurrentCats] = useState<Pet>({
     quillContent: [],
   });
-  const point = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+  const fetchUser = async () => {
+    try {
+      const result: UserData = await getPersonalDetails();
+      console.log("result", result);
+      setUserData(result);
+      setCurrentCats(result.pets[0]);
+    } catch (error) {
+      console.error("Failed to fetch ranking:", error);
+    }
+  };
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const result: UserApi.Record = await getPersonalDetails();
-        console.log("result", result);
-
-        setUserData(result);
-        setCurrentCats(result.pets[0]);
-      } catch (error) {
-        console.error("Failed to fetch ranking:", error);
-      }
-    };
-
     fetchUser(); // 调用函数以获取数据
   }, []);
   const showChangeModal = () => {
     setIsModalOpen(true);
   };
-  const changePersonal = (dataFrom) => {
-    console.log("pa", dataFrom);
+
+  const [personalEditForm, setPersonalEditForm] = useState<editUserParams>({
+    userHeader: {
+      url: "",
+    },
+  });
+  const changePersonal = (dataForm: editUserParams) => {
+    setPersonalEditForm(dataForm);
   };
-  const handleOk = () => {
+  const handleOk = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setIsModalOpen(false);
-    }, 3000);
+    try {
+      await editUserDetails(personalEditForm);
+    } catch (error) {
+      console.error("Failed to fetch ranking:", error);
+    }
+    setLoading(false);
+    setIsModalOpen(false);
+    fetchUser();
   };
   const choosePets = (index: number) => {
     setCurrentCats(userData.pets[index]);
@@ -55,11 +63,7 @@ const personalPage = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const [reportData, setReportData] = useState({
-    reportText: undefined,
-    reportImgIds: [],
-    reportImgUrls: [],
-  });
+
   return (
     <div className="personalPage">
       <div className="bg-white flex justify-center">
@@ -121,7 +125,7 @@ const personalPage = () => {
                 {userData.realName}
               </div>
               <div style={{ color: "#6D7280" }}>
-                {userData.address.join(" ")}
+                {userData.address?.join(" ")}
               </div>
               <div className="break-all">
                 钱包地址:0x84030aDE17E52247aE36ba625EB8f7019CbBd2dA
@@ -329,8 +333,8 @@ const personalPage = () => {
                               <div className="user-pets-details-des">
                                 <div>{item.contentText}</div>
                                 <div className="flex">
-                                  {item.contentImgUrls &&
-                                    item.contentImgUrls?.map(
+                                  {item.contentImgs &&
+                                    item.contentImgs?.map(
                                       (children, chilrenIndex) => {
                                         return (
                                           <div
@@ -341,7 +345,7 @@ const personalPage = () => {
                                               width={100}
                                               alt=""
                                               height={100}
-                                              src={children}
+                                              src={children.url}
                                             />
                                           </div>
                                         );

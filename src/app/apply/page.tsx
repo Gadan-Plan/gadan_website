@@ -19,7 +19,7 @@ import {
 import type { GetProp, UploadProps } from "antd";
 import { addPet } from "@/api/user";
 import type { AddPetParams } from "@/api/user";
-import type { QuillContent } from "@/api/dataType";
+import type { QuillContent, Description } from "@/api/dataType";
 import NFTCanvas from "./logoCreator";
 import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
@@ -113,21 +113,16 @@ const ApplyPage = () => {
       message.success("申请成功");
     });
   };
-  const handleDescriptionChange = (details: any, type: string) => {
-    const newQuillContent: QuillContent[] = fromData.quillContent || [];
-    if (type == "word") {
-      newQuillContent[0].contentText = details;
-      setFromData((prevFromData: AddPetParams) => ({
-        ...prevFromData,
-        quillContent: newQuillContent,
-      }));
-    } else {
-      newQuillContent[0].contentImgs = details;
-      setFromData((prevFromData: AddPetParams) => ({
-        ...prevFromData,
-        quillContent: newQuillContent,
-      }));
-    }
+  const handleDescriptionChange = (dataForm: Description) => {
+    setFromData((prevFromData: AddPetParams) => ({
+      ...prevFromData,
+      quillContent: [
+        {
+          contentText: dataForm.content,
+          contentImgs: dataForm.fileList,
+        },
+      ],
+    }));
   };
   return (
     <>

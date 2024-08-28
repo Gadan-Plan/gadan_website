@@ -25,9 +25,12 @@ const DescribeImg: React.FC<Props> = ({ onDescriptionChange }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  // useEffect(() => {
-  //   setContent(quillContent);
-  // }, [quillContent]);
+  useEffect(() => {
+    onDescriptionChange({
+      content: content,
+      fileList: fileList,
+    });
+  }, [content, fileList]);
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as FileType);
@@ -38,7 +41,6 @@ const DescribeImg: React.FC<Props> = ({ onDescriptionChange }) => {
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    onDescriptionChange(newFileList, "file");
   };
 
   const uploadButton = (
@@ -56,7 +58,6 @@ const DescribeImg: React.FC<Props> = ({ onDescriptionChange }) => {
         className={styles.describeTextarea}
         onChange={(e) => {
           setContent(e.target.value);
-          onDescriptionChange(e.target.value, "word");
         }}
       />
 

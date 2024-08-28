@@ -9,7 +9,6 @@ import {
   Upload,
   Button,
   message,
-  ColorPicker,
   Col,
   Row,
   Radio,
@@ -17,12 +16,13 @@ import {
   Cascader,
 } from "antd";
 import type { GetProp, UploadProps } from "antd";
-import type { selectType, applicationForm } from "./type";
 import "react-quill/dist/quill.snow.css";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
 import addressOption from "@/utils/address/provinces-cities.json";
 import { useTranslation } from "react-i18next";
 import countryOptions from "@/utils/address/country.json";
+import type { editUserParams } from "@/api/user";
+const { TextArea } = Input;
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 interface Props {
   onChangePersonal: Function;
@@ -48,20 +48,15 @@ const beforeUpload = (file: FileType) => {
 const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [fromData, setFromData] = useState<applicationForm>({
-    userHeaderUrl: "",
-    userHeaderId: "",
-    realName: "",
-    country: "",
-    advertisement: "", //我有话讲
-    address: [],
-    walletAddres: "",
-    jobName: "",
+  const [fromData, setFromData] = useState<editUserParams>({
+    userHeader: {
+      url: "https://himg.bdimg.com/sys/portraitn/item/public.1.954c2398.tNqmEVG3OmU6tgbNiJBKTA",
+    },
   });
 
   useEffect(() => {
-    //   console.log(dayjs(new Date()).format('YYYY-MM-DD'));
-  }, []);
+    onChangePersonal(fromData);
+  }, [fromData]);
   //
   const changeHeaderUrl: UploadProps["onChange"] = (info) => {
     if (info.file.status === "uploading") {
@@ -72,14 +67,14 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
       // Get this url from response in real world.
       getBase64(info.file.originFileObj as FileType, (url) => {
         setLoading(false);
-        fromData.headerImageUrl = url;
+        fromData.userHeader.url = url;
       });
     }
   };
 
   return (
     <>
-      <div className="flex py-20 relative  justify-center">
+      <div className="flex py-16 relative  justify-center">
         <div className={styles.applicationForm}>
           <ConfigProvider
             theme={{
@@ -102,9 +97,9 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
                   beforeUpload={beforeUpload}
                   onChange={changeHeaderUrl}
                 >
-                  {fromData.userHeaderUrl ? (
+                  {fromData.userHeader ? (
                     <Image
-                      src={fromData.userHeaderUrl}
+                      src={fromData.userHeader.url}
                       alt="avatar"
                       width={300}
                       height={300}
@@ -132,11 +127,10 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
                   placeholder="请输入"
                   value={fromData.realName}
                   onChange={(e) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: editUserParams) => ({
                       ...prevFromData,
                       realName: e.target.value,
                     }));
-                    onChangePersonal(fromData);
                   }}
                 ></Input>
               </Col>
@@ -154,10 +148,11 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
                   allowClear={false}
                   showSearch
                   onChange={(e: any) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: editUserParams) => ({
                       ...prevFromData,
                       country: e,
                     }));
+                    console.log("fromData", fromData);
                   }}
                 />
               </Col>
@@ -175,8 +170,7 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
                     allowClear={false}
                     placeholder="please choose"
                     onChange={(e) => {
-                      console.log(e);
-                      setFromData((prevFromData: applicationForm) => ({
+                      setFromData((prevFromData: editUserParams) => ({
                         ...prevFromData,
                         address: e,
                       }));
@@ -194,12 +188,47 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
                   placeholder="请输入"
                   value={fromData.jobName}
                   onChange={(e) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: editUserParams) => ({
                       ...prevFromData,
                       jobName: e.target.value,
                     }));
                   }}
                 ></Input>
+              </Col>
+            </Row>
+            <Row className="my-3.5">
+              <Col span={4}>
+                <span>手机号码: </span>
+              </Col>
+              <Col span={12}>
+                <Input
+                  placeholder="请输入"
+                  value={fromData.phoneNumber}
+                  onChange={(e) => {
+                    setFromData((prevFromData: editUserParams) => ({
+                      ...prevFromData,
+                      phoneNumber: e.target.value,
+                    }));
+                  }}
+                ></Input>
+              </Col>
+            </Row>
+            <Row className="my-3.5">
+              <Col span={4}>
+                <span>收货地址: </span>
+              </Col>
+              <Col span={12}>
+                <TextArea
+                  rows={2}
+                  placeholder="请输入"
+                  value={fromData.receivingAddress}
+                  onChange={(e) => {
+                    setFromData((prevFromData: editUserParams) => ({
+                      ...prevFromData,
+                      receivingAddress: e.target.value,
+                    }));
+                  }}
+                ></TextArea>
               </Col>
             </Row>
             <Row className="my-3.5">
@@ -211,7 +240,7 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
                   placeholder="请输入"
                   value={fromData.advertisement}
                   onChange={(e) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: editUserParams) => ({
                       ...prevFromData,
                       advertisement: e.target.value,
                     }));
@@ -228,7 +257,7 @@ const PersonalEdit: React.FC<Props> = ({ onChangePersonal }) => {
                   placeholder="请输入"
                   value={fromData.walletAddres}
                   onChange={(e) => {
-                    setFromData((prevFromData: applicationForm) => ({
+                    setFromData((prevFromData: editUserParams) => ({
                       ...prevFromData,
                       walletAddres: e.target.value,
                     }));
